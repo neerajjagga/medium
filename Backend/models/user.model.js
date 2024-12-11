@@ -16,7 +16,7 @@ const userSchema = mongoose.Schema({
         maxLength : 15,
         trim : true,
     },
-    email : {
+    emailId : {
         type : String,
         required : true,
         unique : true,
@@ -33,7 +33,6 @@ const userSchema = mongoose.Schema({
         type : String,
         required : true,
         minLength : 8,
-        maxLength : 20,
         trim : true,
     },
     bio : {
@@ -42,7 +41,7 @@ const userSchema = mongoose.Schema({
         maxLength : 200,
         trim : true,
     },
-    imageId : {
+    profileUrl : {
         type : String,
         default : "defaultProfileIcon",
     },

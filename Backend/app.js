@@ -6,11 +6,29 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
+app.use(express.json());
+
+// time log middleware
+app.use('/', (req, res, next) => {
+    const date = new Date();
+    console.log(`Req coming for ${req.url}, method is ${req.method}, ip is ${req.ip} at time : ${date.toLocaleString()}`);
+    next();
+})
+
 const { userRouter } = require('./routes/user.route');
 
 app.use('/user', userRouter);
 
-app.use(express.json());
+
+
+//error log middleware
+app.use('/', (err, req, res, next) => {
+    res.status(500).json({
+        message : "Internal server error",
+        Error : err
+    });
+    next();
+})
 
 connectDB()
 .then(() => {

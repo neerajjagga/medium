@@ -25,4 +25,11 @@ const validateSignupData = (req) => {
     }
 }
 
-module.exports = {validateSignupData};
+const validateLoginData = (req) => {
+    const {emailId, password} = req.body;
+    if(!emailId || !password) {
+        throw new Error("Email and password cannot be empty");
+    }
+}
+
+module.exports = {validateSignupData, validateLoginData};

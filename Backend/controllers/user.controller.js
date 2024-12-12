@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const {User} = require("../models/user.model");
-const {validateSignupData} = require("../utils/userValidation");
+const {validateSignupData, validateLoginData} = require("../utils/userValidation");
 
 
 const signupUser = async(req, res) => {
@@ -46,4 +47,14 @@ const signupUser = async(req, res) => {
     }
 }
 
-module.exports = {signupUser};
+const userLogin = async (req, res) => {
+    try {
+        validateLoginData(req);
+        const {emailId, password} = req.body;
+        
+    } catch (error) {
+        
+    }
+}
+
+module.exports = {signupUser, userLogin};

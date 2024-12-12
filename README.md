@@ -38,3 +38,6 @@
 /user/signup
 /user/login
 /user/
+
+
+// doubt on /api/addcomment/:blogId endpoint -> we will see later

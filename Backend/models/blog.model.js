@@ -12,7 +12,7 @@ const blogSchema = mongoose.Schema({
         type : String,
         default : "",
         trim : true,
-        maxLength : 50,
+        maxLength : 100,
     },
     content : {
         type : String,
@@ -22,19 +22,20 @@ const blogSchema = mongoose.Schema({
     },
     thumbnail : {
         type : String,
-        default : "",
+        default : "https://www.contentviewspro.com/wp-content/uploads/2017/07/default_image.png",
     },
-    clapCount : [{
+    claps : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
     }],
     postResponses : [{
         type : mongoose.Schema.Types.ObjectId,
-        ref : 'Comments'
+        ref : 'Comment'
     }],
     visibility : {
         type : String,
         enum : ["locked", "unlocked"],
+        default : "unlocked",
         trim : true,
     },
     tags : {
@@ -44,11 +45,10 @@ const blogSchema = mongoose.Schema({
                 return arr.length <= 10;
             },
             message : "You can add max 10 tags"
-        }
+        },
     },
     readingTime : {
         type : Number,
-        required : true,
     },
     creater : {
         type : mongoose.Schema.Types.ObjectId,

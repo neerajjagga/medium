@@ -1,5 +1,6 @@
-const express = require('express')
+const express = require('express');
 const dotenv = require('dotenv');
+const cookieParser = require('cookie-parser');
 const {connectDB} = require('./db/db');
 const app = express();
 
@@ -7,6 +8,7 @@ dotenv.config();
 const PORT = process.env.PORT;
 
 app.use(express.json());
+app.use(cookieParser());
 
 // time log middleware
 app.use('/', (req, res, next) => {
@@ -16,8 +18,10 @@ app.use('/', (req, res, next) => {
 })
 
 const { userRouter } = require('./routes/user.route');
+const {blogRouter} = require('./routes/blog.route')
 
-app.use('/user', userRouter);
+app.use('/api/auth', userRouter);
+app.use('/api', blogRouter);
 
 
 

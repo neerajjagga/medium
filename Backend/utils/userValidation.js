@@ -26,9 +26,12 @@ const validateSignupData = (req) => {
 }
 
 const validateLoginData = (req) => {
-    const {emailId, password} = req.body;
-    if(!emailId || !password) {
-        throw new Error("Email and password cannot be empty");
+    const {emailId, username, password} = req.body;
+    if(emailId && !emailId || !password) {
+        throw new Error("emailId and password cannot be empty");
+    } 
+    else if(username && !username || !password) {
+        throw new Error("username and password cannot be empty");
     }
 }
 

@@ -28,10 +28,18 @@ const blogSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
     }],
+    clapCount : {
+        type : Number,
+        default : 0
+    },
     postResponses : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Comment'
     }],
+    postResponseCount : {
+        type : Number,
+        default : 0
+    },
     visibility : {
         type : String,
         enum : ["locked", "unlocked"],

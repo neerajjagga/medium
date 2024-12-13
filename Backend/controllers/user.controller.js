@@ -39,7 +39,6 @@ const signupUser = async(req, res) => {
             message : "User created successfully",
         })
     } catch (error) {
-        console.log(error);
         res.status(300).json({
             message : "Error coming while creating user",
             Error : error.message
@@ -61,7 +60,7 @@ const userLogin = async (req, res) => {
         });
 
         if(!user) {
-            return res.status(300).json({
+            return res.status(401).json({
                 messge : "Invalid credentials"
             })
         }
@@ -69,25 +68,48 @@ const userLogin = async (req, res) => {
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if(!isPasswordValid) {
-            return res.status(400).json({
+            return res.status(401).json({
                 message: `Invalid credentials`
             })
         }
         // if not generate jwt based on username and id
         const token = await user.getToken(); 
-        console.log(token);
 
-        res.cookie('token', token);
+        res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
         res.status(200).json({
             message : "Login successfull"
         })
 
     } catch (error) {
-        res.status().json({
+        res.status(400).json({
             message : "Error coming while logging user",
             Error : error.message
         })
     }
 }
 
-module.exports = {signupUser, userLogin};
+const userLogout = async (req, res) => {
+    try {
+
+        const {token} = req.cookies;
+        if(!token) {
+            return res.status(400).json({
+                message : "You were already logout"
+            })
+        }
+
+        res.clearCookie('token', { httpOnly: true, sameSite: 'strict' });
+
+        res.status(200).json({
+            message : "Logout successfull"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            message : "Error coming while logging out user",
+            Error : error.message
+        })
+    }
+}
+
+module.exports = {signupUser, userLogin, userLogout};

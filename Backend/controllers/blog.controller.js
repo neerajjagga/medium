@@ -1,5 +1,6 @@
 const {Blog} = require("../models/blog.model");
-const {Comment} = require("../models/comment.model")
+const {Comment} = require("../models/comment.model");
+const { User } = require("../models/user.model");
 const {validateCreateBlogData, validateCommentData} = require("../utils/blogValidation");
 
 const createBlog = async(req, res) => {
@@ -30,6 +31,12 @@ const createBlog = async(req, res) => {
 
         //save the blog
         await blog.save();
+
+        // push blog id into the user blogs array
+        await User.findByIdAndUpdate({_id : createrId}, {
+            $push : {blogs : blog._id}
+        })
+
         res.status(201).json({
             message : "Blog created successfully"
         });
@@ -66,6 +73,7 @@ const clapBlog = async(req, res) => {
 
         // if user not clapped already then
         clapArray.push(userId)
+        blog.clapCount++;
         await blog.save();
 
         res.status(201).json({
@@ -80,7 +88,7 @@ const clapBlog = async(req, res) => {
     }
 }
 
-const commentBlog = async(req, res) => {
+const addComment = async(req, res) => {
     try {
         validateCommentData(req);
         const {message} = req.body;
@@ -89,6 +97,7 @@ const commentBlog = async(req, res) => {
 
          // validateBlogId
          const blog = await Blog.findById({_id : blogId});
+
          if(!blog) {
              return res.status(400).json({
                  message : "Blog not found"
@@ -104,7 +113,8 @@ const commentBlog = async(req, res) => {
          await comment.save();
 
          const commentsArrayOfBlog = blog.postResponses
-         commentsArrayOfBlog.push(userId);
+         commentsArrayOfBlog.push(comment._id);
+         blog.postResponseCount++;
          await blog.save();
 
          res.status(201).json({
@@ -119,4 +129,87 @@ const commentBlog = async(req, res) => {
     }
 }
 
-module.exports = {createBlog, clapBlog, commentBlog}
+const editComment = async(req, res) => {
+    try {
+        validateCommentData(req);
+        const {message} = req.body;
+        const userId = req.user?._id;
+        const commentId = req.params.commentId;
+
+         // validate is comment valid as well as is the comment is written by the current user
+         const comment = await Comment.findOne({
+            $and : [
+                {_id : commentId},
+                {fromUserId : userId}
+            ]
+         });
+
+         if(!comment) {
+             return res.status(400).json({
+                 message : "comment not found or not written by you"
+             })
+         }
+
+         comment.message = message;
+         await comment.save();
+
+         res.status(201).json({
+            message : "Comment Edited successfully"
+         })
+
+    } catch (error) {        
+        res.status(400).json({
+            message : "Error coming while editing a comment",
+            Error : error.message
+        })
+    }
+}
+
+const deleteComment = async(req, res) => {
+    try {
+        const userId = req.user?._id;
+        const blogId = req.params.blogId;
+        const commentId = req.params.commentId;
+
+         // validate the commemt is present or not
+         const comment = await Comment.findOneAndDelete({
+            $and : [
+                {_id : commentId},
+                {fromUserId : userId}
+            ]
+         });
+
+         console.log(comment);
+    
+         if(!comment) {
+             return res.status(400).json({
+                 message : "comment not found or not written by you"
+             })
+         }
+
+         // then update the blog postResponseCount and delete the commentId from the array
+         const blog = await Blog.findByIdAndUpdate(blogId, 
+            {
+                $pull : {postResponses : commentId}, // pop out the deleted CommentId
+                $inc : {postResponseCount : -1} // decrement the postResponse count
+            },
+            {
+                new : true
+            }
+        );
+
+        res.status(201).json({
+            message : "Comment deleted successfully"
+        });
+
+    } catch (error) {        
+        res.status(400).json({
+            message : "Error coming while editing a comment",
+            Error : error.message
+        })
+    }
+}
+
+
+
+module.exports = {createBlog, clapBlog, addComment, editComment, deleteComment}

@@ -54,9 +54,21 @@ const userSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User'
     }],
+    followersCount : {
+        type : Number,
+        default : 0
+    },
     following : [{
         type : mongoose.Schema.Types.ObjectId,
         ref: 'User',
+    }],
+    followingCount : {
+        type : Number,
+        default : 0
+    },
+    blogs : [{
+        type : mongoose.Schema.Types.ObjectId,
+        ref : 'Blog'
     }],
     createdAt : {
         type : Date,

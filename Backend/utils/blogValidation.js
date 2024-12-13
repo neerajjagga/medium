@@ -21,7 +21,7 @@ const validateCreateBlogData = (req) => {
     else if (visibility && !["locked", "unlocked"].includes(visibility.trim())) {
         throw new Error('Visibility is invalid. It must be either "locked" or "unlocked".');
     }
-    else if(tags && !tags.length <= 10) {
+    else if(tags && tags.length > 10) {
         throw new Error("Maximum tags allowed : 10");
     }
 }

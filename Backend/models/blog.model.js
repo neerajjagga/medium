@@ -8,6 +8,10 @@ const blogSchema = mongoose.Schema({
         minLength : 10,
         maxLength : 50,
     },
+    titleSlug : {
+        type : String,
+        trim : true,
+    },
     subtitle : {
         type : String,
         default : "",
@@ -46,13 +50,13 @@ const blogSchema = mongoose.Schema({
         default : "unlocked",
         trim : true,
     },
-    tags : {
+    topics : {
         type : [String],
         validate : {
-            validator : function (arr) {
-                return arr.length <= 10;
+            validator : function(arr) {
+                return arr.length <= 5;
             },
-            message : "You can add max 10 tags"
+            message : "You can maximum add 5 topics"
         },
     },
     readingTime : {

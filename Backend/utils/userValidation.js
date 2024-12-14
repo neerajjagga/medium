@@ -1,7 +1,7 @@
 const validator = require('validator');
 
 const validateSignupData = (req) => {
-    const {name, username, emailId, password, bio, profileUrl, } = req.body;
+    const {name, username, emailId, password, bio, profileImgUrl, } = req.body;
     if(!name || !username || !emailId || !password) {
         throw new Error("Fields name, username, emailId, and password cannot be empty");
     }
@@ -20,7 +20,7 @@ const validateSignupData = (req) => {
     if (bio && bio.length > 200) { 
         throw new Error("Bio cannot exceed 200 characters");
     }
-    else if(profileUrl && !validator.isURL(profileUrl)) {
+    else if(profileImgUrl && !validator.isURL(profileImgUrl)) {
         throw new Error("Enter valid profile url");
     }
 }

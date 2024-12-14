@@ -16,7 +16,7 @@ const userAuth = async(req, res, next) => {
         const {_id} = decodedObj;
 
         // find user with this user _id
-        const user = await User.findById({_id});
+        const user = await User.findById({_id}).select('-password');
         if(!user) {
             throw new error("User not found -> relogin");
         }        

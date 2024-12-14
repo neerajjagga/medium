@@ -2,7 +2,7 @@ const validator = require('validator');
 
 const validateCreateBlogData = (req) => {
     // required fields -> title, content
-    const {title, subtitle, content, thumbnail, visibility, tags} = req.body;
+    const {title, subtitle, content, thumbnail, visibility, topics} = req.body;
     if(!title || !content) {
         throw new Error("Title or content cannot be empty");
     }
@@ -21,8 +21,8 @@ const validateCreateBlogData = (req) => {
     else if (visibility && !["locked", "unlocked"].includes(visibility.trim())) {
         throw new Error('Visibility is invalid. It must be either "locked" or "unlocked".');
     }
-    else if(tags && tags.length > 10) {
-        throw new Error("Maximum tags allowed : 10");
+    else if(topics && topics.length > 5) {
+        throw new Error("Maximum topics allowed : 5");
     }
 }
 

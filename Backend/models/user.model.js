@@ -27,8 +27,6 @@ const userSchema = mongoose.Schema({
         unique : true,
         trim : true,
         lowercase : true,
-        minLength : 16,
-        maxLength : 40,
         match: [
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
             "Please enter a valid email address", 
@@ -46,9 +44,9 @@ const userSchema = mongoose.Schema({
         maxLength : 200,
         trim : true,
     },
-    profileUrl : {
+    profileImgUrl : {
         type : String,
-        default : "defaultProfileIcon",
+        default : "https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png",
     },
     followers : [{
         type : mongoose.Schema.Types.ObjectId,

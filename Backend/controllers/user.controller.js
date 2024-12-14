@@ -6,7 +6,7 @@ const {validateSignupData, validateLoginData} = require("../utils/userValidation
 const signupUser = async(req, res) => {
     try {
         validateSignupData(req);
-        const {name, username, emailId, password, bio,  profileUrl, } = req.body;
+        const {name, username, emailId, password, bio,  profileImgUrl, } = req.body;
 
         // find if a user already exists with this username and password;
         const isUserPresent = await User.findOne({
@@ -31,10 +31,15 @@ const signupUser = async(req, res) => {
             emailId, 
             password : hassedPassword, 
             bio, 
-            profileUrl
+            profileImgUrl
         });
 
         await user.save();
+
+        // generate token
+        const token = await user.getToken(); 
+        res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
+
         res.status(201).json({
             message : "User created successfully",
         })
@@ -61,7 +66,7 @@ const userLogin = async (req, res) => {
 
         if(!user) {
             return res.status(401).json({
-                messge : "Invalid credentials"
+                message : "Invalid credentials"
             })
         }
         // mathch password

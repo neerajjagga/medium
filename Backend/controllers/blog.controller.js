@@ -6,7 +6,7 @@ const {validateCreateBlogData, validateCommentData} = require("../utils/blogVali
 const createBlog = async(req, res) => {
     try {
         validateCreateBlogData(req);
-        const {title, subtitle, content, thumbnail, visibility, tags} = req.body;
+        const {title, subtitle, content, thumbnail, visibility, topics} = req.body;
 
         const createrId = req.user?._id;        
 
@@ -17,14 +17,20 @@ const createBlog = async(req, res) => {
         const readingTime = Math.floor(wordCount / averageWordsPerMinute);        
         const estimatedReadTime = readingTime === 0 ? 1 : readingTime;
 
+        //generate slug for the title
+        const lowercaseTitle = title.toLowerCase(); 
+        const titleWords = lowercaseTitle.split(' '); 
+        const titleSlug = titleWords.join('-'); 
+        
         // save the data 
         const blog = new Blog({
             title,
+            titleSlug,
             subtitle,
             content,
             thumbnail,
             visibility,
-            tags,
+            topics,
             readingTime : estimatedReadTime,
             creater : createrId,
         })
@@ -210,6 +216,47 @@ const deleteComment = async(req, res) => {
     }
 }
 
+const deleteBlog = async(req, res) => {
+    try {
+        const loggedInUser = req.user;
+        const blogId = req.params.blogId;
+        
+        // if we have deleted the blog then 
+        // -> delete the blog
+        // -> delete all the comments realted to that blog
+        // -> pull the object id of the blog from the user schema
 
+        // find and delete the blog
+        const blog = await Blog.findOneAndDelete({
+            _id: blogId,
+            creater: loggedInUser._id
+        });
+        
+        // if blog not found
+        if(!blog) {
+            return res.status(404).json({
+                message: "Blog not found or you're not authorized to delete this blog",
+            })
+        }
 
-module.exports = {createBlog, clapBlog, addComment, editComment, deleteComment}
+        // delete all the comments related to that blog
+        await Comment.deleteMany({blogId});
+
+        // pull the object id of blog from user blogs array
+        await User.findByIdAndUpdate({_id : loggedInUser._id}, {
+            $pull : {blogs : blogId}
+        })
+
+        res.status(200).json({
+            message : "Blog deleted successfully"
+        })
+
+    } catch (error) {
+        res.status(400).json({
+            message : "Error coming while deleting a blog",
+            Error : error.message
+        })
+    }
+}
+
+module.exports = {createBlog, clapBlog, addComment, editComment, deleteComment, deleteBlog}

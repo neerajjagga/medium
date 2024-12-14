@@ -2,6 +2,7 @@ const express = require('express');
 const dotenv = require('dotenv');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
+const morgan = require('morgan');
 const helmet = require('helmet');
 const chalk = require('chalk');
 const {connectDB} = require('./db/db');
@@ -14,13 +15,13 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use(helmet());
+app.use(morgan('dev'));
 
 // time log middleware
-app.use('/', (req, res, next) => {
-    const { url, method, ip, headers, query } = req;  // Destructure necessary properties
+app.use((req, res, next) => {
+    const { url, method, ip, headers, query } = req; 
     const timestamp = new Date().toLocaleString();
-    
-    // Store the start time for response time calculation
+
     const start = Date.now();
 
     // Log incoming request details
@@ -34,9 +35,8 @@ app.use('/', (req, res, next) => {
     console.log(`🔍 Query Params: ${JSON.stringify(query, null, 2)}`);
     console.log(chalk.cyan.bold('-------------------------------------------'));
 
-    // Capture the response once the request is processed
     res.on('finish', () => {
-        const responseTime = Date.now() - start;  // Calculate response time
+        const responseTime = Date.now() - start; 
 
         console.log(chalk.cyan.bold('-------------------------------------------'));
         console.log(chalk.red('✅ Response Sent:'));
@@ -45,19 +45,21 @@ app.use('/', (req, res, next) => {
         console.log(chalk.cyan.bold('-------------------------------------------'));
     });
 
-    next();  // Pass the request to the next middleware
+    next();  
 });
 
 const { userRouter } = require('./routes/user.route');
 const {blogRouter} = require('./routes/blog.route');
 const {connectionRouter} = require('./routes/connection.route');
+const {profileRouter} = require('./routes/profile.route');
 
 app.use('/api/auth', userRouter);
 app.use('/api', blogRouter);
 app.use('/api', connectionRouter);
+app.use('/api', profileRouter);
 
 //error log middleware
-app.use('/', (err, req, res, next) => {
+app.use((err, req, res, next) => {
     res.status(500).json({
         message : "Internal server error",
         Error : err

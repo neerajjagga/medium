@@ -6,8 +6,10 @@ const {validateSignupData, validateLoginData} = require("../utils/userValidation
 const signupUser = async(req, res) => {
     try {
         validateSignupData(req);
-        const {name, username, emailId, password, bio,  profileImgUrl, } = req.body;
+        const {name, username, emailId, password, bio,  profileImgUrl, interestedTopics} = req.body;
 
+        const lowercaseTopics = interestedTopics.map((topic) => topic.toLowerCase());
+        
         // find if a user already exists with this username and password;
         const isUserPresent = await User.findOne({
             $or : [
@@ -31,7 +33,8 @@ const signupUser = async(req, res) => {
             emailId, 
             password : hassedPassword, 
             bio, 
-            profileImgUrl
+            profileImgUrl,
+            interestedTopics : lowercaseTopics
         });
 
         await user.save();
@@ -44,6 +47,7 @@ const signupUser = async(req, res) => {
             message : "User created successfully",
         })
     } catch (error) {
+        console.log(error);
         res.status(300).json({
             message : "Error coming while creating user",
             Error : error.message

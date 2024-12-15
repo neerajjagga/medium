@@ -52,11 +52,13 @@ const { userRouter } = require('./routes/user.route');
 const {blogRouter} = require('./routes/blog.route');
 const {connectionRouter} = require('./routes/connection.route');
 const {profileRouter} = require('./routes/profile.route');
+const {feedRouter} = require('./routes/feed.route');
 
 app.use('/api/auth', userRouter);
 app.use('/api', blogRouter);
 app.use('/api', connectionRouter);
 app.use('/api', profileRouter);
+app.use('/feed', feedRouter);
 
 //error log middleware
 app.use((err, req, res, next) => {

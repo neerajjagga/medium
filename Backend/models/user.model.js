@@ -64,6 +64,16 @@ const userSchema = mongoose.Schema({
         type : Number,
         default : 0
     },
+    interestedTopics : {
+        type : [String],
+        validate : {
+            validator : function(arr) {
+                return arr.length >= 3;
+            },
+            message : "Please select at least 3 topics"
+        },
+        required : true,
+    },
     blogs : [{
         type : mongoose.Schema.Types.ObjectId,
         ref : 'Blog'

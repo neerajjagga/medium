@@ -29,7 +29,7 @@ const getProfile = async (req, res) => {
             .populate({
                 path: 'following',
                 select: FOLLOWING_USER_SAFE_DATA,
-                options: { limit, skip }
+                options: { limit: limit, skip: skip }
             })
             .populate('blogs', BLOG_SAFE_DATA)
             .exec()

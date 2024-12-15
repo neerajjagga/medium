@@ -21,7 +21,7 @@ const blogSchema = mongoose.Schema({
     content : {
         type : String,
         required : true,
-        maxLength : 3000,
+        maxLength : 5000,
         trim : true,
     },
     thumbnail : {
@@ -50,7 +50,7 @@ const blogSchema = mongoose.Schema({
         default : "unlocked",
         trim : true,
     },
-    topics : {
+    tags : {
         type : [String],
         validate : {
             validator : function(arr) {
@@ -58,11 +58,12 @@ const blogSchema = mongoose.Schema({
             },
             message : "You can maximum add 5 topics"
         },
+        required : true,
     },
     readingTime : {
         type : Number,
     },
-    creater : {
+    creator : {
         type : mongoose.Schema.Types.ObjectId,
         ref : 'User',
     },

@@ -1,9 +1,9 @@
 const validator = require('validator');
 
 const validateSignupData = (req) => {
-    const {name, username, emailId, password, bio, profileImgUrl, } = req.body;
-    if(!name || !username || !emailId || !password) {
-        throw new Error("Fields name, username, emailId, and password cannot be empty");
+    const {name, username, emailId, password, bio, profileImgUrl, interestedTopics} = req.body;
+    if(!name || !username || !emailId || !password || !interestedTopics) {
+        throw new Error("Fields name, username, emailId, password and interestedTopics cannot be empty");
     }
     else if(name.length < 3 || name.length > 25) {
         throw new Error("Name should be inbetween 3-25");
@@ -17,11 +17,14 @@ const validateSignupData = (req) => {
     else if(!validator.isStrongPassword(password)) {
         throw new Error("Enter strong password");
     }
-    if (bio && bio.length > 200) { 
+    else if (bio && bio.length > 200) { 
         throw new Error("Bio cannot exceed 200 characters");
     }
     else if(profileImgUrl && !validator.isURL(profileImgUrl)) {
         throw new Error("Enter valid profile url");
+    }
+    else if(interestedTopics.length < 3) {
+        throw new Error("Select at least 3 topics");
     }
 }
 

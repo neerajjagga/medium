@@ -39,7 +39,7 @@ const followUser = async(req, res) => {
         });
 
         res.status(200).json({
-            message : `You are now following ${userToFollowId}`
+            message : `You are now following ${userToFollow.username}`
         });
 
     } catch (error) {
@@ -68,7 +68,7 @@ const unfollowUser = async(req, res) => {
         const isFollowing = loggedInUser.following.includes(userId);
         if(!isFollowing) {
             return res.status(400).json({
-                message : `You cannot unfollow ${loggedInUser.username} because you are not following him/her`
+                message : `You can't unfollow ${loggedInUser.username} because you are not following him/her`
             })
         }
 

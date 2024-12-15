@@ -6,21 +6,24 @@ const {validateCreateBlogData, validateCommentData} = require("../utils/blogVali
 const createBlog = async(req, res) => {
     try {
         validateCreateBlogData(req);
-        const {title, subtitle, content, thumbnail, visibility, topics} = req.body;
+        const {title, subtitle, content, thumbnail, visibility, tags} = req.body;
 
-        const createrId = req.user?._id;        
+        const creatorId = req.user?._id;        
 
         // generate reading time
         // if avg reading speed is 255 words per min then
         const averageWordsPerMinute = 255;
         const wordCount = content.split(' ').length; 
-        const readingTime = Math.floor(wordCount / averageWordsPerMinute);        
-        const estimatedReadTime = readingTime === 0 ? 1 : readingTime;
+        const estimatedReadTime = Math.ceil(wordCount / averageWordsPerMinute);        
 
         //generate slug for the title
         const lowercaseTitle = title.toLowerCase(); 
         const titleWords = lowercaseTitle.split(' '); 
         const titleSlug = titleWords.join('-'); 
+
+        // generate topics in lowercase
+        const lowercaseTags = tags.map((tag) => tag.toLowerCase());
+        console.log(lowercaseTags);
         
         // save the data 
         const blog = new Blog({
@@ -30,16 +33,16 @@ const createBlog = async(req, res) => {
             content,
             thumbnail,
             visibility,
-            topics,
+            tags : lowercaseTags,
             readingTime : estimatedReadTime,
-            creater : createrId,
+            creator : creatorId,
         })
 
         //save the blog
         await blog.save();
 
         // push blog id into the user blogs array
-        await User.findByIdAndUpdate({_id : createrId}, {
+        await User.findByIdAndUpdate({_id : creatorId}, {
             $push : {blogs : blog._id}
         })
 
@@ -229,7 +232,7 @@ const deleteBlog = async(req, res) => {
         // find and delete the blog
         const blog = await Blog.findOneAndDelete({
             _id: blogId,
-            creater: loggedInUser._id
+            creator: loggedInUser._id
         });
         
         // if blog not found

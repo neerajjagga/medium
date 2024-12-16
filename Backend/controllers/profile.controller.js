@@ -1,5 +1,5 @@
-const { populate } = require('dotenv');
 const { User } = require('../models/user.model');
+const { getPagination } = require('../utils/pagination.utility');
 
 const getProfile = async (req, res) => {
     try {
@@ -66,20 +66,16 @@ const getFollowingUsers = async (req, res) => {
         }
 
         // max 10 users data fetched at a time
-        const DEFAULT_LIMIT = 10;
-        const page = parseInt(req.query.page) || 1;
-        let limit = parseInt(req.query.limit) || DEFAULT_LIMIT;
-        limit = limit <= DEFAULT_LIMIT ? limit : DEFAULT_LIMIT;
-        const skip = (page - 1) * limit;
+        const { limit, skip } = getPagination(req, 15);
 
         // extract following users data
         const followingUsers = await User
             .findOne({ username })
             .select('followingCount following -_id')
             .populate({
-                path : 'following',
-                select : FOLLOWING_USER_SAFE_DATA,
-                options : { limit, skip}
+                path: 'following',
+                select: FOLLOWING_USER_SAFE_DATA,
+                options: { limit, skip }
             })
             .exec()
 
@@ -88,10 +84,10 @@ const getFollowingUsers = async (req, res) => {
                 message: "User not found."
             });
         }
-            
+
         res.status(200).json({
-            message : "Following users data fetch successfully",
-           followingUsers
+            message: "Following users data fetch successfully",
+            followingUsers
         })
 
     } catch (error) {
@@ -115,20 +111,16 @@ const getFollowers = async (req, res) => {
         }
 
         // max 10 users data fetched at a time
-        const DEFAULT_LIMIT = 10;
-        const page = parseInt(req.query.page) || 1;
-        let limit = parseInt(req.query.limit) || DEFAULT_LIMIT;
-        limit = limit <= DEFAULT_LIMIT ? limit : DEFAULT_LIMIT;
-        const skip = (page - 1) * limit;
+        const { limit, skip } = getPagination(req, 15);
 
         // extract followers users data
         const followers = await User
             .findOne({ username })
             .select('followersCount followers -_id')
             .populate({
-                path : 'followers',
-                select : FOLLOWER_USER_SAFE_DATA,
-                options : { limit, skip}
+                path: 'followers',
+                select: FOLLOWER_USER_SAFE_DATA,
+                options: { limit, skip }
             })
             .exec()
 
@@ -137,9 +129,9 @@ const getFollowers = async (req, res) => {
                 message: "User not found."
             });
         }
-            
+
         res.status(200).json({
-            message : "Following users data fetch successfully",
+            message: "Following users data fetch successfully",
             followers
         })
 
@@ -153,4 +145,4 @@ const getFollowers = async (req, res) => {
 }
 
 
-module.exports = { getProfile, getFollowingUsers, getFollowers};
+module.exports = { getProfile, getFollowingUsers, getFollowers };

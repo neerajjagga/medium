@@ -76,6 +76,8 @@ const blogSchema = mongoose.Schema({
     timestamps : true
 });
 
+blogSchema.index({ creator: 1, tags: 1, publishAt: -1 });
+
 const Blog = mongoose.model('Blog', blogSchema);
 
 module.exports = {

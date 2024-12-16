@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const slugify = require('slugify');
 const {User} = require("../models/user.model");
 const {validateSignupData, validateLoginData} = require("../utils/userValidation");
 
@@ -8,7 +9,7 @@ const signupUser = async(req, res) => {
         validateSignupData(req);
         const {name, username, emailId, password, bio,  profileImgUrl, interestedTopics} = req.body;
 
-        const lowercaseTopics = interestedTopics.map((topic) => topic.toLowerCase());
+        const slugifyInterestedTopics = interestedTopics.map(topic => slugify(topic, { lower: true, strict: true}));
         
         // find if a user already exists with this username and password;
         const isUserPresent = await User.findOne({
@@ -34,7 +35,7 @@ const signupUser = async(req, res) => {
             password : hassedPassword, 
             bio, 
             profileImgUrl,
-            interestedTopics : lowercaseTopics
+            interestedTopics : slugifyInterestedTopics
         });
 
         await user.save();

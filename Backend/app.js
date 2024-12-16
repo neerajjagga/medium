@@ -55,9 +55,9 @@ const {profileRouter} = require('./routes/profile.route');
 const {feedRouter} = require('./routes/feed.route');
 
 app.use('/api/auth', userRouter);
-app.use('/api', blogRouter);
-app.use('/api', connectionRouter);
-app.use('/api', profileRouter);
+app.use('/api/blogs', blogRouter);
+app.use('/api/connections', connectionRouter);
+app.use('/api/profile', profileRouter);
 app.use('/feed', feedRouter);
 
 //error log middleware

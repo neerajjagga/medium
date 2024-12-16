@@ -1,3 +1,4 @@
+const slugify = require('slugify');
 const {Blog} = require("../models/blog.model");
 const {Comment} = require("../models/comment.model");
 const { User } = require("../models/user.model");
@@ -17,13 +18,10 @@ const createBlog = async(req, res) => {
         const estimatedReadTime = Math.ceil(wordCount / averageWordsPerMinute);        
 
         //generate slug for the title
-        const lowercaseTitle = title.toLowerCase(); 
-        const titleWords = lowercaseTitle.split(' '); 
-        const titleSlug = titleWords.join('-'); 
+        const titleSlug = slugify(title, { lower: true, strict: true });
 
-        // generate topics in lowercase
-        const lowercaseTags = tags.map((tag) => tag.toLowerCase());
-        console.log(lowercaseTags);
+        // generate slugs for tags
+        const slugifyTags = tags.map(tag => slugify(tag, { lower: true, strict : true}));
         
         // save the data 
         const blog = new Blog({
@@ -33,7 +31,7 @@ const createBlog = async(req, res) => {
             content,
             thumbnail,
             visibility,
-            tags : lowercaseTags,
+            tags : slugifyTags,
             readingTime : estimatedReadTime,
             creator : creatorId,
         })

@@ -46,7 +46,7 @@ const getForYouFeed = async (req, res) => {
 
             return res.status(200).json({
                 message: "Success",
-                blogs : mixedBlogs
+                blogs: mixedBlogs
             })
         }
 
@@ -56,13 +56,13 @@ const getForYouFeed = async (req, res) => {
 
             return res.status(200).json({
                 message: "Success",
-                blogs : mixedGenereBlogs
+                blogs: mixedGenereBlogs
             })
         }
 
         res.status(200).json({
             message: "Success",
-            blogs : userCustomizedBlogs
+            blogs: userCustomizedBlogs
         })
 
     } catch (error) {
@@ -74,55 +74,105 @@ const getForYouFeed = async (req, res) => {
     }
 }
 
-const getTagRelatedFeed = async (req, res) => {
+const getFilteredFeed = async (req, res) => {
     try {
         const loggedInUser = req.user;
-        const BLOG_SAFE_DATA = "title titleSlug subtitle thumbnail clapCount postResponseCount readingTime creator publishAt -_id";
-        const CREATOR_SAFE_DATA = "name username profileImgUrl -_id"
 
-        // adding pagination
+        const BLOG_SAFE_DATA = "title titleSlug subtitle thumbnail clapCount postResponseCount readingTime creator publishAt -_id";
+        const CREATOR_SAFE_DATA = "name username profileImgUrl -_id";
+
+        // Add pagination
         const { limit, skip } = getPagination(req, 20);
 
-        // if tag specified in the query
-        const tag = req.query.tag;
+        const { type, tag } = req.query;
 
-        if (!tag) {
+        // Handle tag-based feed
+        if (type === 'tag') {
+            if (!tag) {
+                return res.status(400).json({
+                    success: false,
+                    message: "Tag parameter is missing"
+                });
+            }
+
+            const tagRelatedBlogs = await Blog.find({
+                $and: [
+                    { creator: { $ne: loggedInUser._id } }, 
+                    { tags: { $in: tag } } 
+                ]
+            })
+                .sort({ publishAt: -1 })
+                .select(BLOG_SAFE_DATA)
+                .populate('creator', CREATOR_SAFE_DATA)
+                .skip(skip)
+                .limit(limit)
+                .lean();
+
+            if (tagRelatedBlogs.length === 0) {
+                return res.status(404).json({
+                    success: true,
+                    message: `No blogs found with the tag "${tag}"`
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Tag-related blogs fetched successfully",
+                blogs: tagRelatedBlogs
+            });
+        }
+
+        // Handle following-based feed
+        else if (type === 'following') {
+            if (loggedInUser.following.length === 0) {
+                return res.status(200).json({
+                    success: true,
+                    message: "Follow someone to see their blogs"
+                });
+            }
+
+            const followingBlogs = await Blog.find({
+                creator: { $in: loggedInUser.following } // Blogs by followed users
+            })
+                .sort({ publishAt: -1 })
+                .select(BLOG_SAFE_DATA)
+                .populate('creator', CREATOR_SAFE_DATA)
+                .skip(skip)
+                .limit(limit)
+                .lean();
+
+            if (followingBlogs.length === 0) {
+                return res.status(200).json({
+                    success: true,
+                    message: "No blogs found from the users you follow",
+                    blogs: []
+                });
+            }
+
+            return res.status(200).json({
+                success: true,
+                message: "Following feed fetched successfully",
+                blogs: followingBlogs
+            });
+        }
+
+        // Invalid type
+        else {
             return res.status(400).json({
-                message: "Tag parameter is missing"
-            })
+                success: false,
+                message: "Invalid type parameter. Use 'tag' or 'following'."
+            });
         }
-
-        const tagRelatedBlogs = await Blog.find({
-            $and: [
-                { creator: { $ne: loggedInUser._id } },
-                { tags: { $in: tag } }
-            ]
-        })
-            .sort({ publishAt: -1 })
-            .select(BLOG_SAFE_DATA)
-            .populate('creator', CREATOR_SAFE_DATA)
-            .skip(skip)
-            .limit(limit)
-            .lean()
-
-        if (tagRelatedBlogs.length === 0) {
-            return res.status(404).json({
-                message: `Blogs not found with ${tag} tag`
-            })
-        }
-
-        return res.status(200).json({
-            message: "Blogs fetched successfully",
-            blogs : tagRelatedBlogs,
-        })
-
+        
     } catch (error) {
-        console.log(error);
-        res.status(500).json({
+        console.error(error);
+        return res.status(500).json({
+            success: false,
             message: "Failed to fetch blogs",
-            Error: error.message
-        })
+            error: error.message
+        });
     }
-}
+};
 
-module.exports = { getForYouFeed, getTagRelatedFeed };
+
+module.exports = { getForYouFeed, getFilteredFeed };

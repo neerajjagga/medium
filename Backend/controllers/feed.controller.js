@@ -111,7 +111,7 @@ const getFilteredFeed = async (req, res) => {
             if (tagRelatedBlogs.length === 0) {
                 return res.status(404).json({
                     success: true,
-                    message: `No blogs found with the tag "${tag}"`
+                    message: `No blogs found with the tag ${tag}`
                 });
             }
 

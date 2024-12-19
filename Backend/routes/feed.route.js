@@ -1,10 +1,10 @@
 const express = require('express');
-const {getForYouFeed, getTagRelatedFeed} = require('../controllers/feed.controller');
+const {getForYouFeed, getFilteredFeed} = require('../controllers/feed.controller');
 const { userAuth } = require('../middlewares/userAuth.middleware');
 
 const feedRouter = express.Router();
 
 feedRouter.get('/for-you', userAuth, getForYouFeed);
-feedRouter.get('/', userAuth, getTagRelatedFeed);
+feedRouter.get('/', userAuth, getFilteredFeed);
 
 module.exports = {feedRouter}

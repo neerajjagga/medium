@@ -8,7 +8,7 @@ const { validateCreateBlogData, validateCommentData } = require("../utils/blogVa
 const createBlog = async (req, res) => {
     try {
         validateCreateBlogData(req);
-        const { title, subtitle, content, thumbnail, visibility, tags } = req.body;
+        const { title, content, thumbnail, visibility, tags } = req.body;
 
         const creatorId = req.user?._id;
 
@@ -28,6 +28,10 @@ const createBlog = async (req, res) => {
         
         // generate slugs for tags
         const slugifyTags = tags.map(tag => slugify(tag, { lower: true, strict: true }));
+
+        // generate subtitle from content
+        const subtitle = content.slice(0, 150).trim().concat('...');
+        console.log(subtitle);
 
         // save the data 
         const blog = new Blog({
@@ -51,13 +55,15 @@ const createBlog = async (req, res) => {
         })
 
         res.status(201).json({
+            success : true,
             message: "Blog created successfully"
         });
 
     } catch (error) {
-        res.status(400).json({
-            message: "Error coming while creating blog",
-            Error: error.message
+        res.status(500).json({
+            success : true,
+            message : "Blog not created",
+            error : error.message,
         })
     }
 }
@@ -71,6 +77,7 @@ const clapBlog = async (req, res) => {
         const blog = await Blog.findById({ _id: blogId });
         if (!blog) {
             return res.status(400).json({
+                success : false,
                 message: "Blog not found"
             })
         }
@@ -79,7 +86,8 @@ const clapBlog = async (req, res) => {
 
         // check if a user has already clapped
         if (clapArray.includes(userId)) {
-            return res.status(209).json({
+            return res.status(409).json({
+                success : false,
                 message: "You have already clapped",
             })
         }
@@ -94,7 +102,8 @@ const clapBlog = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while clapping a blog",
             Error: error.message
         })
@@ -112,7 +121,8 @@ const addComment = async (req, res) => {
         const blog = await Blog.findById({ _id: blogId });
 
         if (!blog) {
-            return res.status(400).json({
+            return res.status(404).json({
+                success : false,
                 message: "Blog not found"
             })
         }
@@ -131,11 +141,13 @@ const addComment = async (req, res) => {
         await blog.save();
 
         res.status(201).json({
+            success : true,
             message: "Comment added successfully"
         })
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while clapping a blog",
             Error: error.message
         })
@@ -158,7 +170,8 @@ const editComment = async (req, res) => {
         });
 
         if (!comment) {
-            return res.status(400).json({
+            return res.status(404).json({
+                success : false,
                 message: "comment not found or not written by you"
             })
         }
@@ -166,12 +179,14 @@ const editComment = async (req, res) => {
         comment.message = message;
         await comment.save();
 
-        res.status(201).json({
+        res.status(200).json({
+            success : true,
             message: "Comment Edited successfully"
         })
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while editing a comment",
             Error: error.message
         })
@@ -195,7 +210,8 @@ const deleteComment = async (req, res) => {
         console.log(comment);
 
         if (!comment) {
-            return res.status(400).json({
+            return res.status(404).json({
+                success : false,
                 message: "comment not found or not written by you"
             })
         }
@@ -211,12 +227,14 @@ const deleteComment = async (req, res) => {
             }
         );
 
-        res.status(201).json({
+        res.status(204).json({
+            success : true,
             message: "Comment deleted successfully"
         });
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while editing a comment",
             Error: error.message
         })
@@ -242,6 +260,7 @@ const deleteBlog = async (req, res) => {
         // if blog not found
         if (!blog) {
             return res.status(404).json({
+                success : false,
                 message: "Blog not found or you're not authorized to delete this blog",
             })
         }
@@ -254,13 +273,15 @@ const deleteBlog = async (req, res) => {
             $pull: { blogs: blogId }
         })
 
-        res.status(200).json({
+        res.status(204).json({
+            success : true,
             message: "Blog deleted successfully"
         })
 
     } catch (error) {
-        res.status(400).json({
-            message: "Error coming while deleting a blog",
+        res.status(500).json({
+            success : false,
+            message: "Error while deleting a blog",
             Error: error.message
         })
     }
@@ -283,6 +304,7 @@ const viewBlog = async (req, res) => {
         // check the username and titleSlug cannnot be empty
         if (!username || !titleSlug) {
             return res.status(404).json({
+                success : false,
                 message: "username and titleSlug is required"
             })
         }
@@ -291,6 +313,7 @@ const viewBlog = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({
+                success : false,
                 message: "Invalid username"
             })
         }
@@ -317,6 +340,7 @@ const viewBlog = async (req, res) => {
 
         if (!blog) {
             return res.status(404).json({
+                success : false,
                 message: "Blog not found"
             })
         }

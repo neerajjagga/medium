@@ -55,6 +55,9 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Feed APIs**
   - For You Feed
   - Filtered Feed
+- **Get Started APIs**
+  - Get Topics
+  - Save Topics
 
 ---
 
@@ -74,6 +77,7 @@ It is a modern, full-featured blog platform that empowers users to create, share
     "bio": "I am a blogger",
     "interestedTopics": ["NodeJS", "Technology", "golang"] // atleast 3 topics
   }
+  ```
 
 ### Login
 
@@ -81,11 +85,12 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Description:** Login a user.
 - **Request Body:**
   ```json
-    {
+  {
     "emailId" : "dedrick.borer@hotmail.com",
     // "username" : "exampleUsername",
     "password" : "@Neeraj123"
-    }
+  }
+  ```
 
 ### Logout
 
@@ -102,25 +107,23 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Description:** Creates a new blog.
 - **Request Body:**
   ```json
-    {
+  {
     "title" : "windows 11 is very secure 2",
     "subtitle" : "Arvo Pärt the holy magician",
     "content" : "riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree..............",
     "tags" :  ["NodeJS", "operating system", "Rust", "technology"] // max 5 tags
-    }
-
+  }
+  ```
 
 ### Delete Blog
 
 - **URL:** `DELETE /api/blogs/deleteblog/:blogId`
 - **Description:** Delete a blog.
 
-
 ### View Blog
 
 - **URL:** `GET /api/blogs/@:username/:titleSlug`
 - **Description:** To open a full fleged blog.
-- **Request Body:**
 
 ### Clap on Blog
 
@@ -133,9 +136,10 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Description:** Add comment on a blog.
 - **Request Body:**
   ```json
-    {
-        "message" : "very nice"
-    }
+  {
+    "message" : "very nice"
+  }
+  ```
 
 ### Edit a comment
 
@@ -143,9 +147,10 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Description:** Edit a comment on a blog.
 - **Request Body:**
   ```json
-    {
-        "message" : "very nice 2"
-    }
+  {
+    "message" : "very nice 2"
+  }
+  ```
 
 ### Delete a comment
 
@@ -231,4 +236,28 @@ It is a modern, full-featured blog platform that empowers users to create, share
      ```
    - **Response:**
      - Status `200`: Returns blogs written by followed users.
+
+---
+
+## Get Started APIs
+
+### Get Topics
+
+- **URL:** `GET /api/get-started/topics`
+- **Description:** Fetches the list of available topics.
+- **Response:**
+  - Status `200`: Returns a list of topics.
+
+### Save Topics
+
+- **URL:** `POST /api/get-started/topics`
+- **Description:** Saves the selected topics for the logged-in user.
+- **Request Body:**
+  ```json
+  {
+    "selectedInterestedTopics": ["NodeJS", "Technology", "golang"]
+  }
+  ```
+- **Response:**
+  - Status `200`: Confirms that the topics were saved successfully.
 

@@ -46,7 +46,7 @@ const userSchema = mongoose.Schema({
     },
     profileImgUrl: {
         type: String,
-        default: "https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png",
+        default: "/assets/media/avatar.png",
     },
     followers: [{
         type: mongoose.Schema.Types.ObjectId,

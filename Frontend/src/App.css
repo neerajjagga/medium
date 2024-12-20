@@ -1,0 +1,22 @@
+/* All Custom CSS Styles */
+
+
+/* Responsive Styles */
+
+@media (max-width: 1279px){
+    .brand-image{
+        right: -8rem;
+    }
+}
+
+@media (max-width: 1023px){
+    .brand-image{
+        right: -16rem;
+    }
+}
+
+@media (max-width: 903px){
+    .brand-image{
+        display: none;
+    }
+}

@@ -13,7 +13,7 @@ const WelcomePage = () => {
   return (
     <div className="flex flex-col min-h-screen">
       {showAuthFrom && <SignIn handleClick={handleClick} />}
-      <Header handleClick={handleClick} bgColor="bg-primary" borderColor="border-black" paddingX="px-8" paddingY="py-5" linksFontSize="text-sm" />
+      <Header handleClick={handleClick} bgColor="bg-primary" borderColor="border-black" paddingX="px-8" paddingY="py-5" linksFontSize="text-sm" container="md:container" marginX="md:mx-auto" />
       <main className="bg-primary relative flex-grow overflow-hidden">
         <div className="w-full md:container md:mx-auto px-8 py-5">
           <div className="flex flex-col gap-12 items-start mt-12">

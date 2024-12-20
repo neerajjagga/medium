@@ -1,5 +1,9 @@
 /* All Custom CSS Styles */
 
+.search-input:focus + .search-icon{
+  color: black;
+}
+
 
 /* Responsive Styles */
 

@@ -30,8 +30,12 @@ const createBlog = async (req, res) => {
         const slugifyTags = tags.map(tag => slugify(tag, { lower: true, strict: true }));
 
         // generate subtitle from content
-        const subtitle = content.slice(0, 150).trim().concat('...');
-        console.log(subtitle);
+        let subtitle = null;
+        if (content.length < 150) {
+            subtitle = content;  // If content is less than 150 characters, use it as it is
+        } else {
+            subtitle = content.slice(0, 150).trim().concat('...');  
+        }
 
         // save the data 
         const blog = new Blog({
@@ -61,7 +65,7 @@ const createBlog = async (req, res) => {
 
     } catch (error) {
         res.status(500).json({
-            success : true,
+            success : false,
             message : "Blog not created",
             error : error.message,
         })

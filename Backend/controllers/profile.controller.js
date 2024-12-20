@@ -88,7 +88,7 @@ const getFollowingUsers = async (req, res) => {
         if (!followingUsers) {
             return res.status(404).json({
                 success : false,
-                message: "User with username '${username}' not found."
+                message: `User with username '${username}' not found.`
             });
         }
 

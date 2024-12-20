@@ -6,90 +6,87 @@ dotenv.config();
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
 const userSchema = mongoose.Schema({
-    name : {
-        type : String,
-        required : true,
-        minLength : 3,
-        maxLength : 25,
-        trim : true,
+    name: {
+        type: String,
+        required: true,
+        minLength: 3,
+        maxLength: 25,
+        trim: true,
     },
-    username : {
-        type : String,
-        required : true,
-        unique : true,
-        minLength : 5,
-        maxLength : 15,
-        trim : true,
+    username: {
+        type: String,
+        required: true,
+        unique: true,
+        minLength: 5,
+        maxLength: 15,
+        trim: true,
     },
-    emailId : {
-        type : String,
-        required : true,
-        unique : true,
-        trim : true,
-        lowercase : true,
+    emailId: {
+        type: String,
+        required: true,
+        unique: true,
+        trim: true,
+        lowercase: true,
         match: [
             /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            "Please enter a valid email address", 
+            "Please enter a valid email address",
         ],
     },
-    password : {
-        type : String,
-        required : true,
-        minLength : 8,
-        trim : true,
+    password: {
+        type: String,
+        required: true,
+        minLength: 8,
+        trim: true,
     },
-    bio : {
-        type : String,
-        default : "",
-        maxLength : 200,
-        trim : true,
+    bio: {
+        type: String,
+        default: "",
+        maxLength: 200,
+        trim: true,
     },
-    profileImgUrl : {
-        type : String,
-        default : "https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png",
+    profileImgUrl: {
+        type: String,
+        default: "https://icons.iconarchive.com/icons/papirus-team/papirus-status/512/avatar-default-icon.png",
     },
-    followers : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'User'
+    followers: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
     }],
-    followersCount : {
-        type : Number,
-        default : 0
+    followersCount: {
+        type: Number,
+        default: 0
     },
-    following : [{
-        type : mongoose.Schema.Types.ObjectId,
+    following: [{
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
     }],
-    followingCount : {
-        type : Number,
-        default : 0
+    followingCount: {
+        type: Number,
+        default: 0
     },
-    interestedTopics : {
-        type : [String],
-        validate : {
-            validator : function(arr) {
-                return arr.length >= 3;
-            },
-            message : "Please select at least 3 topics"
-        },
-        required : true,
+    isSelectedTopics: {
+        type: Boolean,
+        default: false,
     },
-    blogs : [{
-        type : mongoose.Schema.Types.ObjectId,
-        ref : 'Blog'
+    interestedTopics: {
+        type: [String],
+    },
+    blogs: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Blog'
     }],
-    createdAt : {
-        type : Date,
-        default : Date.now,
+    createdAt: {
+        type: Date,
+        default: Date.now,
     },
-}, 
-{
-    timestamps : true
-});
+},
+    {
+        timestamps: true
+    });
 
-userSchema.methods.getToken = async function(){
+userSchema.methods.getToken = async function () {
     const user = this;
-    const token = jwt.sign({_id : user._id}, jwt_secret_key, {expiresIn : '7d'});
+    const token = jwt.sign({ _id: user._id }, jwt_secret_key, { expiresIn: '7d' });
     return token;
 }
 

@@ -37,6 +37,9 @@ It is a modern, full-featured blog platform that empowers users to create, share
   - Sign Up
   - Login
   - Logout
+- **Get Started APIs**
+  - Get Topics
+  - Save Topics
 - **Blog APIs**
   - Create Blog
   - Delete Blog
@@ -55,9 +58,6 @@ It is a modern, full-featured blog platform that empowers users to create, share
 - **Feed APIs**
   - For You Feed
   - Filtered Feed
-- **Get Started APIs**
-  - Get Topics
-  - Save Topics
 
 ---
 
@@ -75,7 +75,6 @@ It is a modern, full-featured blog platform that empowers users to create, share
     "emailId": "example@mail.com",
     "password": "yourPassword",
     "bio": "I am a blogger",
-    "interestedTopics": ["NodeJS", "Technology", "golang"] // atleast 3 topics
   }
   ```
 
@@ -99,6 +98,31 @@ It is a modern, full-featured blog platform that empowers users to create, share
 
 ---
 
+## Get Started APIs
+
+### Get Topics
+
+- **URL:** `GET /api/get-started/topics`
+- **Description:** Fetches the list of available topics.
+- **Response:**
+  - Status `200`: Returns a list of topics.
+
+### Save Topics
+
+- **URL:** `POST /api/get-started/topics`
+- **Description:** Saves the selected topics for the logged-in user.
+- **Request Body:**
+  ```json
+  {
+    "selectedInterestedTopics": ["NodeJS", "Technology", "golang"] // at least 3 topics
+  }
+  ```
+- **Response:**
+  - Status `200`: Confirms that the topics were saved successfully.
+
+
+---
+
 ## Blog APIs
 
 ### Create Blog
@@ -111,6 +135,7 @@ It is a modern, full-featured blog platform that empowers users to create, share
     "title" : "windows 11 is very secure 2",
     "subtitle" : "Arvo Pärt the holy magician",
     "content" : "riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree..............",
+    "thumbnail" : "thumbnail_url",
     "tags" :  ["NodeJS", "operating system", "Rust", "technology"] // max 5 tags
   }
   ```
@@ -236,28 +261,4 @@ It is a modern, full-featured blog platform that empowers users to create, share
      ```
    - **Response:**
      - Status `200`: Returns blogs written by followed users.
-
----
-
-## Get Started APIs
-
-### Get Topics
-
-- **URL:** `GET /api/get-started/topics`
-- **Description:** Fetches the list of available topics.
-- **Response:**
-  - Status `200`: Returns a list of topics.
-
-### Save Topics
-
-- **URL:** `POST /api/get-started/topics`
-- **Description:** Saves the selected topics for the logged-in user.
-- **Request Body:**
-  ```json
-  {
-    "selectedInterestedTopics": ["NodeJS", "Technology", "golang"]
-  }
-  ```
-- **Response:**
-  - Status `200`: Confirms that the topics were saved successfully.
 

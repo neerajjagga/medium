@@ -49,12 +49,14 @@ app.use((req, res, next) => {
 });
 
 const { userRouter } = require('./routes/user.route');
+const {getStartedRouter} = require('./routes/getStarted.route');
 const {blogRouter} = require('./routes/blog.route');
 const {connectionRouter} = require('./routes/connection.route');
 const {profileRouter} = require('./routes/profile.route');
 const {feedRouter} = require('./routes/feed.route');
 
 app.use('/api/auth', userRouter);
+app.use('/api/get-started', getStartedRouter);
 app.use('/api/blogs', blogRouter);
 app.use('/api/connections', connectionRouter);
 app.use('/api/profile', profileRouter);

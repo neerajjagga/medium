@@ -4,7 +4,6 @@ const { Blog } = require("../models/blog.model");
 const { Comment } = require("../models/comment.model");
 const { User } = require("../models/user.model");
 const { validateCreateBlogData, validateCommentData } = require("../utils/blogValidation");
-const { populate } = require('dotenv');
 
 const createBlog = async (req, res) => {
     try {

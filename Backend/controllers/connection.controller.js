@@ -7,6 +7,7 @@ const followUser = async(req, res) => {
 
         if(loggedInUser.username === userToFollowUsername) {
             return res.status(400).json({
+                success : false,
                 message : "You cannot follow yourself"
             })
         }
@@ -15,12 +16,14 @@ const followUser = async(req, res) => {
         const userToFollow = await User.findOne({username : userToFollowUsername});
         if(!userToFollow) {
             return res.status(404).json({
+                success : false,
                 message : "Invaid username"
             })
         }
 
         if (loggedInUser.following.includes(userToFollow._id)) {
-            return res.status(400).json({
+            return res.status(409).json({
+                success : false,
                 message: `You are already following ${userToFollowUsername}.`
             });
         }
@@ -38,15 +41,17 @@ const followUser = async(req, res) => {
             $inc: { followersCount: 1 }
         });
 
-        res.status(200).json({
+        res.status(201).json({
+            success : true,
             message : `You are now following ${userToFollowUsername}`
         });
 
     } catch (error) {
         console.log(error);
-        res.status(400).json({
-            message : `Error coming while following ${userToFollowUsername}`,
-            Error : error
+        res.status(500).json({
+            success : false,
+            message : `An error occurred while trying to follow ${userToFollowUsername}. Please try again later.`,
+            Error : error.message,
         })
     }
 }
@@ -58,6 +63,7 @@ const unfollowUser = async(req, res) => {
 
         if(loggedInUser.username === usernameToUnfollow) {
             return res.status(400).json({
+                success : false,
                 message : "You can't unfollow yourself"
             })
         }
@@ -66,7 +72,8 @@ const unfollowUser = async(req, res) => {
         const user = await User.findOne({username : usernameToUnfollow});
         if(!user) {
             return res.status(404).json({
-                message : "Invaid username"
+                success : false,
+                message : "Invalid username"
             })
         }
 
@@ -74,7 +81,8 @@ const unfollowUser = async(req, res) => {
         const isFollowing = loggedInUser.following.includes(user._id);
         if(!isFollowing) {
             return res.status(400).json({
-                message : `You can't unfollow ${usernameToUnfollow} because you are not following him/her`
+                success : false,
+                message : `You cannot unfollow ${usernameToUnfollow} because you are not following them.`
             })
         }
 
@@ -92,13 +100,15 @@ const unfollowUser = async(req, res) => {
         }, { new : true });
 
         res.status(200).json({
+            success : true,
             message : `You successfully unfollowed ${usernameToUnfollow}`
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
-            message : `Error coming while unfollowing ${usernameToUnfollow}`,
+            success : false,
+            message : `An error occurred while trying to unfollow ${usernameToUnfollow}. Please try again later.`,
             Error : error.message
         })
     }

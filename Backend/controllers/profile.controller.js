@@ -9,7 +9,8 @@ const getProfile = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                message: "Username parameter is missing."
+                success : false,
+                message: "Username parameter is required."
             })
         }
 
@@ -36,19 +37,23 @@ const getProfile = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({
-                message: `User not found with ${username}`
+                success : false,
+                message: `User with username '${username}' not found.`
             })
         }
 
         // return the profile
         res.status(200).json({
-            user,
+            success : true,
+            message : "User profile fetched successfully",
+            data : user,
         })
 
     } catch (error) {
         console.error("Error fetching user profile:", error);
         res.status(500).json({
-            message: "An unexpected error occurred while fetching the profile.",
+            success : false,
+            message: "An error occurred while fetching the profile.",
             error: error.message,
         });
     }
@@ -61,7 +66,8 @@ const getFollowingUsers = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                message: "Username parameter is missing."
+                success : false,
+                message: "Username parameter is required."
             })
         }
 
@@ -81,19 +87,22 @@ const getFollowingUsers = async (req, res) => {
 
         if (!followingUsers) {
             return res.status(404).json({
-                message: "User not found."
+                success : false,
+                message: "User with username '${username}' not found."
             });
         }
 
         res.status(200).json({
-            message: "Following users data fetch successfully",
-            followingUsers
+            success : true,
+            message: "Following users fetched successfully",
+            data : followingUsers
         })
 
     } catch (error) {
         console.error("Error fetching following users:", error);
         res.status(500).json({
-            message: "An unexpected error occurred while fetching the following users.",
+            success : false,
+            message: "An error occurred while fetching the following users.",
             error: error.message,
         });
     }
@@ -106,7 +115,8 @@ const getFollowers = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                message: "Username parameter is missing."
+                success : false,
+                message: "Username parameter is required."
             })
         }
 
@@ -126,19 +136,22 @@ const getFollowers = async (req, res) => {
 
         if (!followers) {
             return res.status(404).json({
-                message: "User not found."
+                success : false,
+                message: `User with username '${username}' not found.`
             });
         }
 
         res.status(200).json({
-            message: "Following users data fetch successfully",
-            followers
+            success : true,
+            message: "Followers users fetch successfully",
+            data : followers
         })
 
     } catch (error) {
         console.error("Error while fetching followers:", error);
         res.status(500).json({
-            message: "An unexpected error occurred while fetching the followers.",
+            success : false,
+            message: "An error occurred while fetching the followers.",
             error: error.message,
         });
     }

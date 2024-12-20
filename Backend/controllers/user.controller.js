@@ -1,5 +1,4 @@
 const bcrypt = require('bcrypt');
-const slugify = require('slugify');
 const { User } = require("../models/user.model");
 const { validateSignupData, validateLoginData } = require("../utils/userValidation");
 
@@ -19,6 +18,7 @@ const signupUser = async (req, res) => {
 
         if (isUserPresent) {
             return res.status(409).json({
+                success : false,
                 message: "A user already exists with this email or username",
             });
         }
@@ -43,12 +43,15 @@ const signupUser = async (req, res) => {
         res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
 
         res.status(201).json({
+            success : true,
             message: "User created successfully",
-        })
+        });
+        
     } catch (error) {
         console.log(error);
-        res.status(300).json({
-            message: "Error coming while creating user",
+        res.status(500).json({
+            success : false,
+            message: "Error occurred while creating user",
             Error: error.message
         })
     }
@@ -69,6 +72,7 @@ const userLogin = async (req, res) => {
 
         if (!user) {
             return res.status(401).json({
+                success : false,
                 message: "Invalid credentials"
             })
         }
@@ -77,6 +81,7 @@ const userLogin = async (req, res) => {
 
         if (!isPasswordValid) {
             return res.status(401).json({
+                success : false,
                 message: `Invalid credentials`
             })
         }
@@ -85,11 +90,13 @@ const userLogin = async (req, res) => {
 
         res.cookie('token', token, { httpOnly: true, sameSite: 'strict' });
         res.status(200).json({
+            success : true,
             message: "Login successfull"
         })
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while logging user",
             Error: error.message
         })
@@ -102,18 +109,21 @@ const userLogout = async (req, res) => {
         const { token } = req.cookies;
         if (!token) {
             return res.status(400).json({
-                message: "You were already logout"
+                success : false,
+                message: "You are already logged out"
             })
         }
 
         res.clearCookie('token', { httpOnly: true, sameSite: 'strict' });
 
         res.status(200).json({
+            success : true,
             message: "Logout successfull"
         })
 
     } catch (error) {
-        res.status(400).json({
+        res.status(500).json({
+            success : false,
             message: "Error coming while logging out user",
             Error: error.message
         })

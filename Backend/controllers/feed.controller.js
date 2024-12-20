@@ -45,7 +45,7 @@ const getForYouFeed = async (req, res) => {
             const mixedBlogs = userCustomizedBlogs.concat(pendingMixedGenereBlogs);
 
             return res.status(200).json({
-                message: "Success",
+                success : true,
                 blogs: mixedBlogs
             })
         }
@@ -55,19 +55,20 @@ const getForYouFeed = async (req, res) => {
             const mixedGenereBlogs = await fetchMixedGenereBlogs(skip, limit);
 
             return res.status(200).json({
-                message: "Success",
+                success : true,
                 blogs: mixedGenereBlogs
             })
         }
 
         res.status(200).json({
-            message: "Success",
+            success : true,
             blogs: userCustomizedBlogs
         })
 
     } catch (error) {
         console.log(error);
         res.status(500).json({
+            success : false,
             message: "Failed to fetch blogs",
             Error: error.message
         })
@@ -109,7 +110,7 @@ const getFilteredFeed = async (req, res) => {
                 .lean();
 
             if (tagRelatedBlogs.length === 0) {
-                return res.status(404).json({
+                return res.status(204).json({
                     success: true,
                     message: `No blogs found with the tag ${tag}`
                 });
@@ -117,7 +118,7 @@ const getFilteredFeed = async (req, res) => {
 
             return res.status(200).json({
                 success: true,
-                message: "Tag-related blogs fetched successfully",
+                message: "Blogs fetched successfully",
                 blogs: tagRelatedBlogs
             });
         }
@@ -142,16 +143,16 @@ const getFilteredFeed = async (req, res) => {
                 .lean();
 
             if (followingBlogs.length === 0) {
-                return res.status(200).json({
+                return res.status(204).json({
                     success: true,
                     message: "No blogs found from the users you follow",
-                    blogs: []
+                    blogs : [],
                 });
             }
 
             return res.status(200).json({
                 success: true,
-                message: "Following feed fetched successfully",
+                message: "Blogs fetched successfully",
                 blogs: followingBlogs
             });
         }

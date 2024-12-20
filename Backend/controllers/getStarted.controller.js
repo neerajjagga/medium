@@ -4,12 +4,17 @@ const { topics } = require("../data/topics");
 
 const getTopics = async (req, res) => {
     try {
-        res.status(200).json({ topicsData: topics });
+        res.status(200).json({ 
+            success : true,
+            message : "Topics fetched successfully",
+            topicsData: topics 
+        });
     } catch (error) {
         console.log("Error coming while sending topics" + error);
         res.status(500).json({
             success: false,
-            message: "Topics not fetched"
+            message: "Topics not fetched",
+            Error : error.message,
         });
     }
 }
@@ -24,6 +29,7 @@ const saveTopics = async (req, res) => {
         // check if selectedInterestedTopics is not an array 
         if (!Array.isArray(selectedInterestedTopics)) {
             return res.status(400).json({
+                success : false,
                 message: "selectedInterestedTopics should be an array"
             });
         }
@@ -31,6 +37,7 @@ const saveTopics = async (req, res) => {
         // validate length
         if (!selectedInterestedTopics || selectedInterestedTopics.length === 0) {
             return res.status(400).json({
+                success : false,
                 message: "selectedInterestedTopics array is required"
             });
         }
@@ -39,7 +46,7 @@ const saveTopics = async (req, res) => {
         if (selectedInterestedTopics.length < 3) {
             return res.status(400).json({
                 success: false,
-                message: "Select at least 3 topics"
+                message: "Please select at least 3 topics to proceed. This helps us provide relevant content."
             })
         }
 
@@ -54,14 +61,14 @@ const saveTopics = async (req, res) => {
 
         res.status(200).json({
             success: true,
-            message: "Interested topics added successfully"
+            message: "Your selected topics have been added successfully"
         })
 
     } catch (error) {
         console.log("Error coming while saving interested topics" + error);
         res.status(500).json({
             success: false,
-            message: "Topics not saved",
+            message: "An error occurred while saving your selected topics. Please try again later.",
             Error: error.message,
         })
     }

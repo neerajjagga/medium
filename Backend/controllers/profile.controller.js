@@ -1,5 +1,6 @@
 const { User } = require('../models/user.model');
 const { getPagination } = require('../utils/pagination.utility');
+const {validateProfileUpdateData} = require('../utils/userValidation');
 
 const getProfile = async (req, res) => {
     try {
@@ -157,5 +158,62 @@ const getFollowers = async (req, res) => {
     }
 }
 
+const updateProfile = async (req, res) => {
+    try {
+        const loggedInUser = req.user;
+        const {name, username, bio, profileImgUrl} = req.body;
 
-module.exports = { getProfile, getFollowingUsers, getFollowers };
+        if(!name && !username && !bio && !profileImgUrl) {
+            return res.status(400).json({
+                success : false,
+                message : "At least one field (name, username, bio or profileImgUrl) must be provided for update."
+            })
+        }
+
+        validateProfileUpdateData(req);
+
+        const updateData = {};
+        if(name) updateData.name = name;
+        if(username) {
+            // check the user is not updating the older username
+            if(loggedInUser.username === username) {
+                return res.status(400).json({
+                    success : false,
+                    message : "Username can't be same",
+                })
+            }
+            // check if the username is available or not
+            const isUserWithUsername = await User.findOne({username});
+            if(isUserWithUsername) {
+                return res.status(400).json({
+                    success : false,
+                    message : "Username not available"
+                })
+            }
+            updateData.username = username;
+        }
+        if(bio) updateData.bio = bio;
+        if(profileImgUrl) updateData.profileImgUrl = profileImgUrl;
+
+        console.log(updateData);
+
+        const updatedUser = await User.findByIdAndUpdate({_id : loggedInUser._id}, updateData, {new : true}).select('-password -_id');
+
+        return res.status(200).json({
+            success : true,
+            message : "Profile updated successfully",
+            user : updatedUser,
+        })
+     
+    } catch (error) {
+        const statusCode = error.status || 500;
+        console.error("Error while updating profile:", error);
+        res.status(statusCode).json({
+            success : false,
+            message: "An error occurred while updating the profile.",
+            error: error.message,
+        });
+    }
+}
+
+module.exports = { getProfile, getFollowingUsers, getFollowers, updateProfile };

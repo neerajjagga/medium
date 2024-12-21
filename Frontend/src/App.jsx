@@ -7,6 +7,7 @@ import "./App.css";
 import WelcomePage from "./pages/WelcomePage";
 import HomePage from "./pages/HomePage";
 import SelectTagsPage from "./pages/SelectTagsPage";
+import NewStory from "./pages/NewStoryPage"
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -54,6 +55,16 @@ const App = () => {
               )
             ) : (
               <Navigate to="/welcome" />
+            )
+          }
+        />
+        <Route 
+          path="/new-story"
+          element={
+            authUser ? (
+              <NewStory />
+            ) : (
+              <WelcomePage />
             )
           }
         />

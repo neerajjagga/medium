@@ -46,7 +46,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"emailId\" : \"dedrick.borer@hotmail.com\",\n    \"password\" : \"@Neeraj123\"\n}",
+							"raw": "{\n    \"username\" : \"Kiara.Mayer49\",\n    \"password\" : \"@Neeraj123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -96,6 +96,39 @@
 							]
 						},
 						"description": "### Login API\n\nThis API endpoint is used to authenticate and login a user.\n\n#### Request Body\n\n- emailId (text, required): The email address of the user.\n    \n- password (text, required): The password for the user's account.\n    \n\n#### Response\n\n- Status: 200\n    \n- Content-Type: application/json\n    \n- message (string): A message indicating the result of the login attempt."
+					},
+					"response": []
+				},
+				{
+					"name": "/api/auth/check",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/auth/check",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"auth",
+								"check"
+							]
+						},
+						"description": "### API equest Description\n\nThis API endpoint allows users to sign up for the application by providing their name, username, email, password, and bio in the request body.\n\nRequest Body\n\n- `name` (string): The name of the user.\n    \n- `username` (string): The username chosen by the user.\n    \n- `emailId` (string): The email address of the user.\n    \n- `password` (string): The chosen password for the account.\n    \n- `bio` (string): A brief bio or description provided by the user.\n    \n\n### Response\n\nThe response to the request will have a status code of 409, indicating a conflict. The content type of the response will be `application/json`, and the response body will include a `message` field, which may provide additional information about the conflict.\n\n### JSON Schema for Response\n\n``` json\n{\n  \"type\": \"object\",\n  \"properties\": {\n    \"message\": {\n      \"type\": \"string\"\n    }\n  }\n}\n\n ```"
 					},
 					"response": []
 				}
@@ -165,7 +198,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"title\" : \"windows 11 is very secure 2\",\n    \"subtitle\" : \"Arvo Pärt the holy magician\",\n    \"content\" : \"riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree more. For me, music is just as important as food, if not more so. Tolkien’s Galadriel concurs. I like it when you look up someone you admire in Wikipedia, and the entry begins with “So and so is a so and so” not “was a so and so,” which is often the case. Let’s say I am so happy to find them still alive. This is truer about Arvo Pärt, the Estonian composer than just about anyone else, for his music lets me leave this planet while he is still here to create more. As the liner notes from Ursula Schoch’s and Marcel Worms’s wonderful Pärt — Collected Works for Violin and Piano tell us: “Some composers become famous only after their death, others are already recognized while alive. Arvo Pärt, in contrast, belongs to another category; he is already a living legend.” Yes, of course, I love Beethoven and have for most of my life. I admire Handel and Bach more than I can say, and I also love quirky Mozart and prolific Haydn. I have a superb recording of Beethoven’s string quartets (Orford String Quartet), and I must have listened to them fifty times or more by now. The sweet familiarity of those… The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas on the obverse (pictured), while the reverse is a complex scene with the winged goddess Victory. Proposed by the American Legion as a fundraiser for the 100th anniversary of Texas independence from Mexico, the coin was approved by Congress in 1933. It was designed by sculptor Pompeo Coppini, and, after initial rejection by the Commission of Fine Arts, the designs were approved and the coins entered production at the Philadelphia Mint in October 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas on the obverse (pictured), while the reverse is a complex scene with the winged goddess Victory. Proposed by the American Legion as a fundraiser for the 100th anniversary of Texas independence from Mexico, the coin was approved by Congress in 1933. It was designed by sculptor Pompeo Coppini, and, after initial rejection by the Commission of Fine Arts, the designs were approved and the coins entered production at the Philadelphia Mint in October 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas on the obverse (pictured), while the reverse is a complex scene with the winged goddess Victory. Proposed by the American Legion as a fundraiser for the 100th anniversary of Texas independence from Mexico, the coin was approved by Congress in 1933. It was designed by sculptor Pompeo Coppini, and, after initial rejection by the Commission of Fine Arts, the designs were approved and the coins entered production at the Philadelphia Mint in October 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)\",\n    \"tags\" :  [\"NodeJS\", \"operating system\", \"Rust\", \"technology\", \"6\"]\n}",
+							"raw": "{\n    \"title\" : \"windows 11 is very secure 2\",\n    \"subtitle\" : \"Arvo Pärt the holy magician\",\n    \"content\" : \"riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree more. For me, music is just as important as f lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas or 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)\",\n    \"tags\" :  [\"NodeJS\", \"operating system\", \"Rust\", \"technology\", \"6\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -205,7 +238,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/@Junius95/windows-11-is-very-secure-2",
+							"raw": "localhost:3000/api/blogs/@Kiara.Mayer49/windows-11-is-very-secure-2-c1b9b9976e",
 							"host": [
 								"localhost"
 							],
@@ -213,8 +246,8 @@
 							"path": [
 								"api",
 								"blogs",
-								"@Junius95",
-								"windows-11-is-very-secure-2"
+								"@Kiara.Mayer49",
+								"windows-11-is-very-secure-2-c1b9b9976e"
 							]
 						}
 					},
@@ -227,7 +260,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"message\" : \"Subscribe for more articles\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -235,7 +268,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/deleteblog/676012f97e29286c18dc463e",
+							"raw": "localhost:3000/api/blogs/deleteblog/6768006d388e954191e58e89",
 							"host": [
 								"localhost"
 							],
@@ -244,7 +277,7 @@
 								"api",
 								"blogs",
 								"deleteblog",
-								"676012f97e29286c18dc463e"
+								"6768006d388e954191e58e89"
 							]
 						}
 					},
@@ -265,7 +298,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/clap/6763b1332456a6759a970a5c",
+							"raw": "localhost:3000/api/blogs/clap/6768006d388e954191e58e89",
 							"host": [
 								"localhost"
 							],
@@ -274,7 +307,7 @@
 								"api",
 								"blogs",
 								"clap",
-								"6763b1332456a6759a970a5c"
+								"6768006d388e954191e58e89"
 							]
 						}
 					},
@@ -295,7 +328,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/addcomment/676429054f0514d237a21ed1",
+							"raw": "localhost:3000/api/blogs/addcomment/6768006d388e954191e58e89",
 							"host": [
 								"localhost"
 							],
@@ -304,7 +337,7 @@
 								"api",
 								"blogs",
 								"addcomment",
-								"676429054f0514d237a21ed1"
+								"6768006d388e954191e58e89"
 							]
 						},
 						"description": "The endpoint allows the user to add a comment with a message to a specific resource identified by the ID \"675c058cd41c3269daa5ad3e\".\n\n### Request Body\n\n- message (string, required): The message content for the comment.\n    \n\n### Response\n\nThe response is in JSON format and has the following schema:\n\n``` json\n{\n    \"message\": \"string\"\n}\n\n ```"
@@ -326,7 +359,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/editcomment/676013917e29286c18dc4650",
+							"raw": "localhost:3000/api/blogs/editcomment/676800d0388e954191e58e98",
 							"host": [
 								"localhost"
 							],
@@ -335,7 +368,7 @@
 								"api",
 								"blogs",
 								"editcomment",
-								"676013917e29286c18dc4650"
+								"676800d0388e954191e58e98"
 							]
 						}
 					},
@@ -347,7 +380,7 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/api/blogs/deletecomment/676013337e29286c18dc4646/676013917e29286c18dc4650",
+							"raw": "localhost:3000/api/blogs/deletecomment/6768006d388e954191e58e89/676800d0388e954191e58e98",
 							"host": [
 								"localhost"
 							],
@@ -356,8 +389,8 @@
 								"api",
 								"blogs",
 								"deletecomment",
-								"676013337e29286c18dc4646",
-								"676013917e29286c18dc4650"
+								"6768006d388e954191e58e89",
+								"676800d0388e954191e58e98"
 							]
 						}
 					},
@@ -383,7 +416,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/connections/follow/@Alfreda.Batz30",
+							"raw": "localhost:3000/api/connections/follow/@Kiara.Mayer49",
 							"host": [
 								"localhost"
 							],
@@ -392,7 +425,7 @@
 								"api",
 								"connections",
 								"follow",
-								"@Alfreda.Batz30"
+								"@Kiara.Mayer49"
 							]
 						}
 					},
@@ -413,7 +446,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/connections/unfollow/@German10",
+							"raw": "localhost:3000/api/connections/unfollow/@Kiara.Mayer49",
 							"host": [
 								"localhost"
 							],
@@ -422,7 +455,7 @@
 								"api",
 								"connections",
 								"unfollow",
-								"@German10"
+								"@Kiara.Mayer49"
 							]
 						}
 					},
@@ -451,7 +484,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/profile/@Macy.Daniel89",
+							"raw": "localhost:3000/api/profile/@Kiara.Mayer49",
 							"host": [
 								"localhost"
 							],
@@ -459,7 +492,36 @@
 							"path": [
 								"api",
 								"profile",
-								"@Macy.Daniel89"
+								"@Kiara.Mayer49"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "/api/profile/edit",
+					"request": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\" : \"jaggajatt123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "localhost:3000/api/profile/edit",
+							"host": [
+								"localhost"
+							],
+							"port": "3000",
+							"path": [
+								"api",
+								"profile",
+								"edit"
 							]
 						}
 					},
@@ -483,7 +545,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/profile/@Macy.Daniel89/following?page=1&limit=10",
+							"raw": "localhost:3000/api/profile/@Rhianna_Rice85/following?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -491,7 +553,7 @@
 							"path": [
 								"api",
 								"profile",
-								"@Macy.Daniel89",
+								"@Rhianna_Rice85",
 								"following"
 							],
 							"query": [
@@ -526,7 +588,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/profile/@Macy.Daniel89/followers?page=1&limit=10",
+							"raw": "localhost:3000/api/profile/@Rhianna_Rice85/followers?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
@@ -534,7 +596,7 @@
 							"path": [
 								"api",
 								"profile",
-								"@Macy.Daniel89",
+								"@Rhianna_Rice85",
 								"followers"
 							],
 							"query": [
@@ -562,12 +624,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/feed/for-you?page=1&limit=10",
+							"raw": "localhost:3000/api/feed/for-you?page=1&limit=10",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"api",
 								"feed",
 								"for-you"
 							],
@@ -591,12 +654,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/feed/?type=tag&tag=nodejs&page=1&limit=10",
+							"raw": "localhost:3000/api/feed/?type=tag&tag=nodejs&page=1&limit=10",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"api",
 								"feed",
 								""
 							],
@@ -628,12 +692,13 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "localhost:3000/feed/?type=following&page=1&limit=5",
+							"raw": "localhost:3000/api/feed/?type=following&page=1&limit=5",
 							"host": [
 								"localhost"
 							],
 							"port": "3000",
 							"path": [
+								"api",
 								"feed",
 								""
 							],

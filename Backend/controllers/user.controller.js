@@ -4,6 +4,7 @@ const {
   validateSignupData,
   validateLoginData,
 } = require("../utils/userValidation");
+const {obfuscateEmail} = require('../utils/obfuscateEmail');
 
 const signupUser = async (req, res) => {
   try {
@@ -25,11 +26,15 @@ const signupUser = async (req, res) => {
     // Hash password
     const hassedPassword = bcrypt.hashSync(password, 10);
 
+    // generate obfuscate email 
+    const obfuscatedEmailId = obfuscateEmail(emailId);
+
     // Create new user and save
     const user = new User({
       name,
       username,
       emailId,
+      obfuscatedEmailId,
       password: hassedPassword,
       bio,
     });
@@ -38,6 +43,7 @@ const signupUser = async (req, res) => {
 
     // Generate token
     const token = await user.getToken();
+
     res.cookie("token", token, {
       maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
       httpOnly: true,
@@ -48,12 +54,15 @@ const signupUser = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: { ...user._doc, password: undefined }, // Exclude password from response
+      user: { ...user._doc, password: undefined , emailId : undefined},
     });
+
   } catch (error) {
-    res.status(500).json({
+    console.log(error);
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
       success: false,
-      message: error.message,
+      message : error.message,
     });
   }
 };
@@ -66,7 +75,7 @@ const userLogin = async (req, res) => {
     // Check if email or username exists
     const user = await User.findOne({
       $or: [{ username }, { emailId }],
-    });
+    }).select('-_id');
 
     if (!user) {
       return res.status(401).json({
@@ -97,12 +106,14 @@ const userLogin = async (req, res) => {
     res.status(200).json({
       success: true,
       message: "Login successful",
-      user: { ...user._doc, password: undefined }, // Exclude password from response
+      user: { ...user._doc, password: undefined, emailId : undefined },
     });
   } catch (error) {
-    res.status(500).json({
+    const statusCode = error.status || 500;
+    res.status(statusCode).json({
       success: false,
-      message: error.message,
+      message : "Login failed",
+      error: error.message,
     });
   }
 };

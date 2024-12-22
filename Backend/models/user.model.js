@@ -32,6 +32,9 @@ const userSchema = mongoose.Schema({
             "Please enter a valid email address",
         ],
     },
+    obfuscatedEmailId : {
+        type : String,
+    },
     password: {
         type: String,
         required: true,

@@ -9,23 +9,48 @@ const userAuth = async (req, res, next) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      throw new Error("Token not valid -> relogin");
+      return res.status(401).json({
+        success: false,
+        message: "Authentication token missing. Please login.",
+      });
     }
     // decode token to get the user _id
-    const decodedObj = jwt.verify(token, jwt_secret_key);
+    let decodedObj;
+    try {
+      decodedObj = jwt.verify(token, jwt_secret_key);
+    } catch (err) {
+      const message =
+        err.name === "TokenExpiredError"
+          ? "Token expired. Please login again."
+          : "Invalid token. Authentication failed.";
+      return res.status(401).json({
+        success: false,
+        message,
+      });
+    }
     const { _id } = decodedObj;
+    if (!_id) {
+      return res.status(400).json({
+        success: false,
+        message: "Token payload is invalid. User ID is missing.",
+      });
+    }
 
     // find user with this user _id
     const user = await User.findById({ _id }).select("-password");
     if (!user) {
-      throw new error("User not found -> relogin");
+      return res.status(404).json({
+        success: false,
+        message: "User not found. Please login again.",
+      });
     }
     req.user = user;
     next();
   } catch (error) {
-    return res.status(400).json({ 
-      success : false,
-      message: error.message 
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error. Please try again later.",
     });
   }
 };

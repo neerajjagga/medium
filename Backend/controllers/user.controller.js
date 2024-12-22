@@ -75,7 +75,7 @@ const userLogin = async (req, res) => {
     // Check if email or username exists
     const user = await User.findOne({
       $or: [{ username }, { emailId }],
-    }).select('-_id');
+    });
 
     if (!user) {
       return res.status(401).json({
@@ -91,7 +91,7 @@ const userLogin = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
-      });
+      }).select('-password');
     }
 
     // Generate JWT token

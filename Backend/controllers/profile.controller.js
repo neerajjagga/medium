@@ -160,17 +160,10 @@ const getFollowers = async (req, res) => {
 
 const updateProfile = async (req, res) => {
     try {
+        validateProfileUpdateData(req);
+
         const loggedInUser = req.user;
         const {name, username, bio, profileImgUrl} = req.body;
-
-        if(!name && !username && !bio && !profileImgUrl) {
-            return res.status(400).json({
-                success : false,
-                message : "At least one field (name, username, bio or profileImgUrl) must be provided for update."
-            })
-        }
-
-        validateProfileUpdateData(req);
 
         const updateData = {};
         if(name) updateData.name = name;
@@ -195,8 +188,6 @@ const updateProfile = async (req, res) => {
         if(bio) updateData.bio = bio;
         if(profileImgUrl) updateData.profileImgUrl = profileImgUrl;
 
-        console.log(updateData);
-
         const updatedUser = await User.findByIdAndUpdate({_id : loggedInUser._id}, updateData, {new : true}).select('-password -_id');
 
         return res.status(200).json({
@@ -204,7 +195,7 @@ const updateProfile = async (req, res) => {
             message : "Profile updated successfully",
             user : updatedUser,
         })
-     
+    
     } catch (error) {
         const statusCode = error.status || 500;
         console.error("Error while updating profile:", error);

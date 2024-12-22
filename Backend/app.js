@@ -69,11 +69,11 @@ app.use("/api/feed", feedRouter);
 
 //error log middleware
 app.use((err, req, res, next) => {
+  console.error(err);
   res.status(500).json({
-    message: "Internal server error",
-    Error: err,
+      message: "Internal server error",
+      error: err.message || err,
   });
-  next();
 });
 
 connectDB()

@@ -64,7 +64,8 @@ const createBlog = async (req, res) => {
         });
 
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.status || 500;
+        res.status(statusCode).json({
             success : false,
             message : "Blog not created",
             error : error.message,
@@ -150,9 +151,10 @@ const addComment = async (req, res) => {
         })
 
     } catch (error) {
-        res.status(500).json({
+        const statusCode = error.status || 500;
+        res.status(statusCode).json({
             success : false,
-            message: "Error coming while clapping a blog",
+            message: "Error coming while commenting a blog",
             Error: error.message
         })
     }

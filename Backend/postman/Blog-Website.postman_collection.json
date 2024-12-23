@@ -144,7 +144,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"selectedInterestedTopics\" : [\"tech\", \"nodejs\", \"operating SYSTEM\"]\n}",
+							"raw": "{\n    \"selectedInterestedTopics\" : [\"tech\", \"nodejs\", \"operating\"]\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -197,13 +197,29 @@
 						"method": "POST",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"title\" : \"windows 11 is very secure 2\",\n    \"subtitle\" : \"Arvo Pärt the holy magician\",\n    \"content\" : \"riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree more. For me, music is just as important as f lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas or 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)\",\n    \"tags\" :  [\"NodeJS\", \"operating system\", \"Rust\", \"technology\", \"6\"]\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "thumbnailImage",
+									"type": "file",
+									"src": "/home/codingjesus/Pictures/Wallpaper/451898.jpg"
+								},
+								{
+									"key": "title",
+									"value": "Arvo Pärt the holy magician",
+									"type": "text"
+								},
+								{
+									"key": "content",
+									"value": "riedrich Nietzsche once said, “If there were no music, life would be a mistake.” I could not agree more. For me, music is just as important as f lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)The Texas Centennial half dollar was struck by the U.S. Bureau of the Mint from 1934 to 1938. It features an eagle and the Lone Star of Texas or 1934. The first coins to reach the public were sold by auction in Austin, Texas, on December 15, 1934. Profits from the coins helped finance the Texas Memorial Museum in Austin. Most 1934-dated coins went unsold and were sent back to the Mint. Smaller issues took place each year through 1938. Despite the relative lack of sales, the issue is popular with collectors, with the coins gradually gaining in value. (Full article...)",
+									"type": "text"
+								},
+								{
+									"key": "tags",
+									"value": "[\"NodeJS\", \"operating system\", \"Rust\", \"technology\", \"6\"]",
+									"type": "text"
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "localhost:3000/api/blogs/createblog",
@@ -268,7 +284,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/deleteblog/6768006d388e954191e58e89",
+							"raw": "localhost:3000/api/blogs/deleteblog/676916d461f4203c014baef4",
 							"host": [
 								"localhost"
 							],
@@ -277,7 +293,7 @@
 								"api",
 								"blogs",
 								"deleteblog",
-								"6768006d388e954191e58e89"
+								"676916d461f4203c014baef4"
 							]
 						}
 					},
@@ -298,7 +314,7 @@
 							}
 						},
 						"url": {
-							"raw": "localhost:3000/api/blogs/clap/6768006d388e954191e58e89",
+							"raw": "localhost:3000/api/blogs/clap/676904345c55594760a39f1f",
 							"host": [
 								"localhost"
 							],
@@ -307,7 +323,7 @@
 								"api",
 								"blogs",
 								"clap",
-								"6768006d388e954191e58e89"
+								"676904345c55594760a39f1f"
 							]
 						}
 					},
@@ -504,13 +520,31 @@
 						"method": "PATCH",
 						"header": [],
 						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"username\" : \"jaggajatt123\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "profileImage",
+									"type": "file",
+									"src": "/home/codingjesus/Pictures/Saved PIctures/GdWRmKZWIAAVXdx.jpeg"
+								},
+								{
+									"key": "name",
+									"value": "Manav Jagga",
+									"type": "text"
+								},
+								{
+									"key": "bio",
+									"value": "I love software engineering",
+									"type": "text",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "jagganeeraj",
+									"type": "text",
+									"disabled": true
 								}
-							}
+							]
 						},
 						"url": {
 							"raw": "localhost:3000/api/profile/edit",

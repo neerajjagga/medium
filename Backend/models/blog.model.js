@@ -24,9 +24,8 @@ const blogSchema = mongoose.Schema({
         maxLength : 5000,
         trim : true,
     },
-    thumbnail : {
+    thumbnailUrl : {
         type : String,
-        default : "https://www.contentviewspro.com/wp-content/uploads/2017/07/default_image.png",
     },
     claps : [{
         type : mongoose.Schema.Types.ObjectId,

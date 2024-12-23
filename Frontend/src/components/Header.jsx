@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import SearchBar from "./SearchBar";
 import { Bell, SquarePen } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const Header = (props) => {
   const {
@@ -12,12 +13,10 @@ const Header = (props) => {
     paddingY,
     linksFontSize,
     container,
-    marginX
+    marginX,
   } = props;
 
   const { authUser } = useAuthStore();
-
-  const [showProfileModel, setShowProfileModal] = useState(false);
 
   return (
     <header
@@ -29,17 +28,19 @@ const Header = (props) => {
       >
         <div className="flex gap-4 items-center">
           <div className="text-3xl capitalize">
-            <a href="/">Medium</a>
+            <Link to="/">Medium</Link>
           </div>
-          {authUser && <SearchBar />}
+          {authUser && (
+            <SearchBar />
+          )}
         </div>
 
         <ul className={`flex items-center gap-7 capitalize ${linksFontSize}`}>
           <li className="hidden sm:block">
-            <a href="/new-story" className="group flex gap-2 items-center">
+            <Link to="/new-story" className="group flex gap-2 items-center">
               {authUser && (
                 <SquarePen
-                  className="size-6 text-neutral-800 group-hover:text-black"
+                  className="size-5 text-neutral-800 group-hover:text-black"
                   absoluteStrokeWidth={true}
                   size={40}
                 />
@@ -47,26 +48,25 @@ const Header = (props) => {
               <span className="text-neutral-800 group-hover:text-black">
                 Write
               </span>
-            </a>
+            </Link>
           </li>
           {authUser && (
             <li>
-              <a href="/me/notifications" className="group">
+              <Link to="/me/notifications" className="group">
                 <Bell
-                  className="size-6 text-neutral-800 group-hover:text-black"
+                  className="size-5 text-neutral-800 group-hover:text-black"
                   absoluteStrokeWidth={true}
                   size={40}
                 />
-              </a>
+              </Link>
             </li>
           )}
           {authUser && (
             <li
               className="rounded-full cursor-pointer hover:shadow-sm"
-              onClick={() => setShowProfileModal(true)}
             >
               <img
-                className="size-9 object-cover"
+                className="size-8 object-cover"
                 src={authUser.profileImgUrl}
                 alt={authUser.name}
               />

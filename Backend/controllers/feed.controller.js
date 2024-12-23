@@ -146,7 +146,6 @@ const getFilteredFeed = async (req, res) => {
                 return res.status(204).json({
                     success: true,
                     message: "No blogs found from the users you follow",
-                    blogs : [],
                 });
             }
 

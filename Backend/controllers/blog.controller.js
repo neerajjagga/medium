@@ -4,12 +4,14 @@ const { Blog } = require("../models/blog.model");
 const { Comment } = require("../models/comment.model");
 const { User } = require("../models/user.model");
 const { validateCreateBlogData, validateCommentData } = require("../utils/blogValidation");
+const {uploadImageOnCloudinary, deleteImageOnCloudinary} = require('../utils/cloudinary.utility');
+const fs = require('fs');
 
 const createBlog = async (req, res) => {
     try {
         validateCreateBlogData(req);
-        const { title, content, thumbnail, visibility, tags } = req.body;
-
+        const { title, content, visibility, tags } = req.body;
+    
         const creatorId = req.user?._id;
 
         // generate reading time
@@ -27,7 +29,7 @@ const createBlog = async (req, res) => {
         const finalSlug = `${titleSlug}-${uniqueId}`;
         
         // generate slugs for tags
-        const slugifyTags = tags.map(tag => slugify(tag, { lower: true, strict: true }));
+        const slugifyTags = JSON.parse(tags).map(tag => slugify(tag, { lower: true, strict: true }));
 
         // generate subtitle from content
         let subtitle = null;
@@ -37,13 +39,42 @@ const createBlog = async (req, res) => {
             subtitle = content.slice(0, 150).trim().concat('...');  
         }
 
+        let secure_url = null;
+
+        // if req.file
+        if(req.file) {
+            try {
+                const FOLDER_NAME = "thumbnail-images";
+                const response = await uploadImageOnCloudinary(req.file.path, FOLDER_NAME);
+
+                // delete the file from local directory
+                fs.unlinkSync(req.file.path);
+
+                secure_url = response.secure_url;
+
+            }
+            catch (error) {
+                console.log("Error coming while uploading image");
+
+                if(req.file && req.file.path) {
+                    fs.unlinkSync(req.file.path);
+                }
+                
+                return res.status(500).json({
+                    success : false,
+                    message: 'Failed to upload image, try again later',
+                    error: error.message,
+                });
+            }
+        }
+
         // save the data 
         const blog = new Blog({
             title,
             titleSlug : finalSlug,
             subtitle,
             content,
-            thumbnail,
+            thumbnailUrl : secure_url,
             visibility,
             tags: slugifyTags,
             readingTime: estimatedReadTime,
@@ -54,9 +85,10 @@ const createBlog = async (req, res) => {
         await blog.save();
 
         // push blog id into the user blogs array
-        await User.findByIdAndUpdate({ _id: creatorId }, {
-            $push: { blogs: blog._id }
-        })
+        await User.findByIdAndUpdate(
+            { _id: creatorId }, 
+            {$push: { blogs: blog._id }}
+        )
 
         res.status(201).json({
             success : true,
@@ -64,7 +96,13 @@ const createBlog = async (req, res) => {
         });
 
     } catch (error) {
+        console.log("Error coming while creating blog" + error);
         const statusCode = error.status || 500;
+        
+        if(req.file && req.file.path) {
+            fs.unlinkSync(req.file.path);
+        }
+        
         res.status(statusCode).json({
             success : false,
             message : "Blog not created",
@@ -256,6 +294,7 @@ const deleteBlog = async (req, res) => {
         // -> delete the blog
         // -> delete all the comments realted to that blog
         // -> pull the object id of the blog from the user schema
+        // -> delete the image from cloudinary
 
         // find and delete the blog
         const blog = await Blog.findOneAndDelete({
@@ -263,7 +302,7 @@ const deleteBlog = async (req, res) => {
             creator: loggedInUser._id
         });
 
-        // if blog not found
+        // if blog not found        
         if (!blog) {
             return res.status(404).json({
                 success : false,
@@ -279,7 +318,16 @@ const deleteBlog = async (req, res) => {
             $pull: { blogs: blogId }
         })
 
-        res.status(204).json({
+        // delete the thubhnail image from the cloudinary if the thumbnail url exists
+        if(blog.thumbnailUrl !== null) {
+            try {
+                await deleteImageOnCloudinary(blog.thumbnailUrl);
+            } catch (error) {
+                console.log("Error coming while deleting thumbnial", error);
+            }
+        }
+
+        res.status(200).json({
             success : true,
             message: "Blog deleted successfully"
         })

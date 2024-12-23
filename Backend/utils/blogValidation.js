@@ -1,7 +1,6 @@
-const validator = require('validator');
 
 const validateCreateBlogData = (req) => {
-  const { title, content, thumbnail, visibility, tags } = req.body;
+  const { title, content, visibility, tags } = req.body;
 
   if (!title || !content || !tags) {
     throw { status: 400, message: "Title, content, or tags cannot be empty" };
@@ -12,14 +11,23 @@ const validateCreateBlogData = (req) => {
   if (content.length < 1 || content.length > 5000) {
     throw { status: 400, message: "Content length should be between 1-5000 characters" };
   }
-  if (thumbnail && !validator.isURL(thumbnail)) {
-    throw { status: 400, message: "Thumbnail URL is not valid" };
-  }
   if (visibility && !["locked", "unlocked"].includes(visibility.trim())) {
     throw { status: 400, message: 'Visibility is invalid. It must be either "locked" or "unlocked".' };
   }
-  if (tags.length > 5) {
+  if(!Array.isArray(JSON.parse(tags))) {
+    throw { status: 400, message: "Tags should be an array" };
+  }
+  if (JSON.parse(tags).length > 5) {
     throw { status: 400, message: "Maximum tags allowed: 5" };
+  }
+  if(req.file) {
+    const validMimeTypes = ["image/jpeg", "image/png", "image/gif"];
+    if(!validMimeTypes.includes(req.file.mimetype)) {
+      throw {status : 400, message : "Invalid file type: only JPEG, PNG, or GIF images are allowed."};
+    }
+    if (req.file.size > 10 * 1024 * 1024) { 
+      throw { status: 400, message: "File is too large. Maximum allowed size is 10 MB." };
+    }
   }
 };
 

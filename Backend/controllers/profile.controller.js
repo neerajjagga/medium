@@ -1,6 +1,8 @@
 const { User } = require('../models/user.model');
 const { getPagination } = require('../utils/pagination.utility');
-const {validateProfileUpdateData} = require('../utils/userValidation');
+const { validateProfileUpdateData } = require('../utils/userValidation');
+const fs = require('fs');
+const { uploadImageOnCloudinary } = require('../utils/cloudinary.utility');
 
 const getProfile = async (req, res) => {
     try {
@@ -10,7 +12,7 @@ const getProfile = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                success : false,
+                success: false,
                 message: "Username parameter is required."
             })
         }
@@ -38,22 +40,22 @@ const getProfile = async (req, res) => {
 
         if (!user) {
             return res.status(404).json({
-                success : false,
+                success: false,
                 message: `User with username '${username}' not found.`
             })
         }
 
         // return the profile
         res.status(200).json({
-            success : true,
-            message : "User profile fetched successfully",
-            data : user,
+            success: true,
+            message: "User profile fetched successfully",
+            data: user,
         })
 
     } catch (error) {
         console.error("Error fetching user profile:", error);
         res.status(500).json({
-            success : false,
+            success: false,
             message: "An error occurred while fetching the profile.",
             error: error.message,
         });
@@ -67,7 +69,7 @@ const getFollowingUsers = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                success : false,
+                success: false,
                 message: "Username parameter is required."
             })
         }
@@ -88,21 +90,21 @@ const getFollowingUsers = async (req, res) => {
 
         if (!followingUsers) {
             return res.status(404).json({
-                success : false,
+                success: false,
                 message: `User with username '${username}' not found.`
             });
         }
 
         res.status(200).json({
-            success : true,
+            success: true,
             message: "Following users fetched successfully",
-            data : followingUsers
+            data: followingUsers
         })
 
     } catch (error) {
         console.error("Error fetching following users:", error);
         res.status(500).json({
-            success : false,
+            success: false,
             message: "An error occurred while fetching the following users.",
             error: error.message,
         });
@@ -116,7 +118,7 @@ const getFollowers = async (req, res) => {
 
         if (!username) {
             return res.status(400).json({
-                success : false,
+                success: false,
                 message: "Username parameter is required."
             })
         }
@@ -137,21 +139,21 @@ const getFollowers = async (req, res) => {
 
         if (!followers) {
             return res.status(404).json({
-                success : false,
+                success: false,
                 message: `User with username '${username}' not found.`
             });
         }
 
         res.status(200).json({
-            success : true,
+            success: true,
             message: "Followers users fetch successfully",
-            data : followers
+            data: followers
         })
 
     } catch (error) {
         console.error("Error while fetching followers:", error);
         res.status(500).json({
-            success : false,
+            success: false,
             message: "An error occurred while fetching the followers.",
             error: error.message,
         });
@@ -163,44 +165,78 @@ const updateProfile = async (req, res) => {
         validateProfileUpdateData(req);
 
         const loggedInUser = req.user;
-        const {name, username, bio, profileImgUrl} = req.body;
+        const { name, username, bio } = req.body;
 
         const updateData = {};
-        if(name) updateData.name = name;
-        if(username) {
+        if (name) updateData.name = name;
+        if (username) {
             // check the user is not updating the older username
-            if(loggedInUser.username === username) {
+            if (loggedInUser.username === username) {
                 return res.status(400).json({
-                    success : false,
-                    message : "Username can't be same",
+                    success: false,
+                    message: "Username can't be same as the previous one",
                 })
             }
             // check if the username is available or not
-            const isUserWithUsername = await User.findOne({username});
-            if(isUserWithUsername) {
+            const isUserWithUsername = await User.findOne({ username });
+            if (isUserWithUsername) {
                 return res.status(400).json({
-                    success : false,
-                    message : "Username not available"
+                    success: false,
+                    message: "Username not available"
                 })
             }
             updateData.username = username;
         }
-        if(bio) updateData.bio = bio;
-        if(profileImgUrl) updateData.profileImgUrl = profileImgUrl;
+        if (bio) updateData.bio = bio;
 
-        const updatedUser = await User.findByIdAndUpdate({_id : loggedInUser._id}, updateData, {new : true}).select('-password -_id');
+        if (req.file) {
+            try {
+                const FOLDER_NAME = "profile-images"
+                const response = await uploadImageOnCloudinary(req.file.path, FOLDER_NAME);
+
+                fs.unlinkSync(req.file.path);
+
+                updateData.profileImgUrl = response.secure_url;
+
+            }
+            catch (error) {
+                console.log("Error coming while uploading image");
+
+                if(req.file && req.file.path) {
+                    fs.unlinkSync(req.file.path);
+                }
+
+                return res.status(500).json({
+                    success: false,
+                    message: 'Failed to upload file',
+                    error: error.message,
+                });
+            }
+        }
+
+        const updatedUser = await User.findByIdAndUpdate(
+            { _id: loggedInUser._id }, 
+            updateData, 
+            { new: true }
+        ).select('-password -_id');
 
         return res.status(200).json({
-            success : true,
-            message : "Profile updated successfully",
-            user : updatedUser,
+            success: true,
+            message: "Profile updated successfully",
+            user: updatedUser,
         })
-    
+
     } catch (error) {
         const statusCode = error.status || 500;
         console.error("Error while updating profile:", error);
+
+        // check if the file is not in our local disk in case of any error
+        if (req.file && req.file.path) {
+            fs.unlinkSync(req.file.path);
+        }
+
         res.status(statusCode).json({
-            success : false,
+            success: false,
             message: "An error occurred while updating the profile.",
             error: error.message,
         });

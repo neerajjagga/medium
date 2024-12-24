@@ -42,9 +42,9 @@ const BlogCard = (props) => {
       </div>
       <Link
         to={`${creator.username}/${titleSlug}`}
-        className="col-span-3 flex items-center gap-8"
+        className="col-span-3 grid grid-cols-12 justify-between gap-8"
       >
-        <div className="flex flex-col gap-2">
+        <div className="col-span-8 flex flex-col gap-2 justify-center">
           <h2 className="text-2xl tracking-tighter leading-7 font-bold capitalize text-neutral-800">
             {title}
           </h2>
@@ -52,15 +52,15 @@ const BlogCard = (props) => {
             {subtitle}
           </h3>
         </div>
-        <div>
+        <div className="col-span-4">
           <img
             src={thumbnail}
             alt={title}
-            className="w-full object-cover rounded-md"
+            className="object-cover rounded-sm"
           />
         </div>
       </Link>
-      <div className="col-span-2 mt-3 flex justify-between items-center gap-2">
+      <div className="col-span-2 flex justify-between items-center mt-2 gap-2">
         <div className="flex gap-4 items-center">
           <div className="flex gap-3 items-center">
             <svg

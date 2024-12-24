@@ -5,47 +5,73 @@ import toast from "react-hot-toast";
 export const useFeedStore = create((set, get) => ({
   blogs: [],
   isGettingFeeds: false,
+  allBlogsFetched: false,
   message: "",
 
-  setBlogs: (data) => set({blogs: data}),
+  setBlogs: (data) => set({ blogs: data }),
+  setIsAllBlogsFetched: (value) => set({ allBlogsFetched: value }),
 
   getForYouFeeds: async (page = 1, limit = 10) => {
-    set({ isGettingFeeds: true });
+    if (get().allBlogsFetched) {
+      return;
+    }
+
+    if (page === 1) {
+      set({ isGettingFeeds: true });
+    }
     try {
       const res = await axiosInstance.get(
         `/feed/for-you?page=${page}&limit=${limit}`
       );
 
-      if (!res.data.blogs.length) {
-        return set({ message: "No Blogs found!" });
+      console.log(res.data);
+      if (!res.data.blogs) {
+        return set({ message: res.data.message });
       }
 
-      set({ blogs: [...res.data.blogs, ...get().blogs], message: "" });
-
+      set({
+        blogs: [...res.data.blogs, ...get().blogs],
+        allBlogsFetched: res.data.allBlogsFetched,
+        message: "",
+      });
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isGettingFeeds: false });
+      if (page === 1) {
+        set({ isGettingFeeds: false });
+      }
     }
   },
 
   getTopicRelatedFeeds: async (type, topic, page = 1, limit = 10) => {
-    set({ isGettingFeeds: true });
+    if (get().allBlogsFetched) {
+      return;
+    }
+
+    if (page === 1) {
+      set({ isGettingFeeds: true });
+    }
     try {
       const res = await axiosInstance.get(
         `feed/?type=${type}&tag=${topic}&page=${page}&limit=${limit}`
       );
 
+      console.log(res.data);
       if (!res.data.blogs) {
-        return set({ message: res.data.message, blogs: [] });
+        return set({ message: res.data.message });
       }
 
-      set({ blogs: [...res.data.blogs, ...get().blogs], message: "" });
-
+      set({
+        blogs: [...res.data.blogs, ...get().blogs],
+        allBlogsFetched: res.data.allBlogsFetched,
+        message: "",
+      });
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
-      set({ isGettingFeeds: false });
+      if (page === 1) {
+        set({ isGettingFeeds: false });
+      }
     }
   },
 }));

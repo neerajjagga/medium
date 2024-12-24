@@ -3,6 +3,7 @@ import { useAuthStore } from "../store/useAuthStore";
 import SearchBar from "./SearchBar";
 import { Bell, SquarePen } from "lucide-react";
 import { Link } from "react-router-dom";
+import ProfileModal from "./ProfileModal";
 
 const Header = (props) => {
   const {
@@ -18,13 +19,15 @@ const Header = (props) => {
 
   const { authUser } = useAuthStore();
 
+  const [showProfileModal, setShowProfileModal] = useState(false);
+
   return (
     <header
       className={`${bgColor} w-full sticky top-0 border-b-[1px] border-solid ${borderColor}`}
       style={{ zIndex: 5 }}
     >
       <div
-        className={`w-full ${container} ${marginX} flex justify-between items-center ${paddingX} ${paddingY}`}
+        className={`relative w-full ${container} ${marginX} flex justify-between items-center ${paddingX} ${paddingY}`}
       >
         <div className="flex gap-4 items-center">
           <div className="text-3xl capitalize">
@@ -64,6 +67,7 @@ const Header = (props) => {
           {authUser && (
             <li
               className="rounded-full cursor-pointer hover:shadow-sm"
+              onClick={() => setShowProfileModal((prev) => !prev)}
             >
               <img
                 className="size-8 object-cover"
@@ -88,6 +92,8 @@ const Header = (props) => {
             </li>
           )}
         </ul>
+
+        {showProfileModal && <ProfileModal />}
       </div>
     </header>
   );

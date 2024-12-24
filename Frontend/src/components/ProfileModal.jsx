@@ -2,7 +2,7 @@ import React from 'react'
 
 const ProfileModal = () => {
   return (
-    <div>ProfileModal</div>
+    <div className='absolute right-0 bottom-0'>ProfileModal</div>
   )
 }
 

@@ -4,7 +4,7 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const morgan = require("morgan");
 const helmet = require("helmet");
-const {rateLimit} = require('express-rate-limit');
+// const {rateLimit} = require('express-rate-limit');
 const chalk = require("chalk");
 const { connectDB } = require("./db/db");
 const app = express();
@@ -12,20 +12,20 @@ const app = express();
 dotenv.config();
 const PORT = process.env.PORT;
 
-const limiter = rateLimit({
-  windowMs : 15 * 60 * 1000, 
-  limit : 100,
-  message: {
-    status: 429,
-    error: "Too Many Requests",
-    message: "You have exceeded the request limit. Please try again later.",
-  },
-  standardHeaders: true,
-})
+// const limiter = rateLimit({
+//   windowMs : 15 * 60 * 1000, 
+//   limit : 100,
+//   message: {
+//     status: 429,
+//     error: "Too Many Requests",
+//     message: "You have exceeded the request limit. Please try again later.",
+//   },
+//   standardHeaders: true,
+// })
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(limiter);
+// app.use(limiter);
 app.use(
   cors({
     origin: ["http://localhost:5173"],

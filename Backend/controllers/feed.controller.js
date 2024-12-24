@@ -37,6 +37,8 @@ const getForYouFeed = async (req, res) => {
                 .lean()
         }
 
+        console.log('User Customized Blogs: ', userCustomizedBlogs.length);
+
         if (userCustomizedBlogs.length > 0 && userCustomizedBlogs.length < limit) {
             const pendingNoOfBlogs = limit - userCustomizedBlogs.length;
             const pendingMixedGenereBlogs = await fetchMixedGenereBlogs(skip, pendingNoOfBlogs);
@@ -44,11 +46,17 @@ const getForYouFeed = async (req, res) => {
             // after that concat both usercustomized field and mixedgenere fields
             const mixedBlogs = userCustomizedBlogs.concat(pendingMixedGenereBlogs);
 
+            console.log('Pending Blogs: ', pendingNoOfBlogs);
+            console.log('Mixed Blogs: ', pendingMixedGenereBlogs.length);
+            console.log('Total Blogs: ', mixedBlogs.length);
+
             return res.status(200).json({
                 success : true,
-                blogs: mixedBlogs
+                blogs: mixedBlogs,
+                allBlogsFetched: mixedBlogs.length < limit
             })
         }
+
 
         if (userCustomizedBlogs.length === 0) {
             // mixed blogs
@@ -56,13 +64,15 @@ const getForYouFeed = async (req, res) => {
 
             return res.status(200).json({
                 success : true,
-                blogs: mixedGenereBlogs
+                blogs: mixedGenereBlogs,
+                allBlogsFetched: mixedGenereBlogs.length < limit
             })
         }
 
         res.status(200).json({
             success : true,
-            blogs: userCustomizedBlogs
+            blogs: userCustomizedBlogs,
+            allBlogsFetched: userCustomizedBlogs.length < limit
         })
 
     } catch (error) {
@@ -92,7 +102,7 @@ const getFilteredFeed = async (req, res) => {
             if (!tag) {
                 return res.status(400).json({
                     success: false,
-                    message: "Tag parameter is missing"
+                    message: "Tag parameter is missing",
                 });
             }
 
@@ -110,7 +120,7 @@ const getFilteredFeed = async (req, res) => {
                 .lean();
 
             if (tagRelatedBlogs.length === 0) {
-                return res.status(204).json({
+                return res.status(200).json({
                     success: true,
                     message: `No blogs found with the tag ${tag}`
                 });
@@ -119,7 +129,8 @@ const getFilteredFeed = async (req, res) => {
             return res.status(200).json({
                 success: true,
                 message: "Blogs fetched successfully",
-                blogs: tagRelatedBlogs
+                blogs: tagRelatedBlogs,
+                allBlogsFetched: tagRelatedBlogs.length < limit
             });
         }
 

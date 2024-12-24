@@ -20,6 +20,8 @@ const FeedContainer = () => {
   const {
     isGettingFeeds,
     message,
+    allBlogsFetched,
+    setIsAllBlogsFetched,
     blogs,
     setBlogs,
     getForYouFeeds,
@@ -39,13 +41,12 @@ const FeedContainer = () => {
       } else {
         getTopicRelatedFeeds("tag", activeTopic, page);
       }
+      return setLoading(false);
     }
-    return setLoading(false);
   }, [page]);
 
-
   useEffect(() => {
-    if (loading === true) {
+    if (loading === true && !allBlogsFetched) {
       setPage((prevValue) => prevValue + 1);
     }
   }, [loading]);
@@ -92,6 +93,7 @@ const FeedContainer = () => {
     setActiveTopic(topic);
     setPage(1);
     setBlogs([]);
+    setIsAllBlogsFetched(false)
 
     if (topic === "following") {
       getTopicRelatedFeeds("following", topic, page);
@@ -104,28 +106,18 @@ const FeedContainer = () => {
 
   const handlePageScroll = (e) => {
     if (
-      document.body.scrollHeight - 300 <
+      document.body.scrollHeight - 537 <
       window.scrollY + window.innerHeight
     ) {
-      if(loading === false){
+      if (loading === false) {
         setLoading(true);
       }
     }
   };
 
-  function debounce(func, delay) {
-    let timeoutId;
-    return function (...args) {
-      if (timeoutId) {
-        clearTimeout(timeoutId);
-      }
-      timeoutId = setTimeout(() => {
-        func(...args);
-      }, delay);
-    };
-  }
+  window.addEventListener("scroll", handlePageScroll);
 
-  window.addEventListener("scroll", debounce(handlePageScroll, 500));
+  console.log(page, loading, allBlogsFetched);
 
   return (
     <div className="flex flex-col">
@@ -193,27 +185,21 @@ const FeedContainer = () => {
         )}
       </div>
       <div className="flex flex-col gap-5 py-6">
-        {isGettingFeeds ? (
+        {isGettingFeeds && (
           <div className="flex justify-center items-center mt-16">
             <Loader2 className="size-8 animate-spin" />
           </div>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {blogs.map((blog, index) => {
-              return <BlogCard key={index} cardData={blog} />;
-            })}
-            {message && (
-              <h3 className="mt-4 text-lg text-neutral-800 font-semibold capitalize">
-                {message}
-              </h3>
-            )}
-            {(loading && !message) && (
-              <div className="flex justify-center items-center mt-8">
-                <Loader2 className="size-8 animate-spin" />
-              </div>
-            )}
-          </ul>
         )}
+        <ul className="flex flex-col gap-3">
+          {blogs.map((blog, index) => {
+            return <BlogCard key={index} cardData={blog} />;
+          })}
+          {message && (
+            <h3 className="mt-4 text-base text-neutral-800 font-semibold">
+              {message}
+            </h3>
+          )}
+        </ul>
       </div>
     </div>
   );

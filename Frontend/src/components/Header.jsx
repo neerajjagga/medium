@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import SearchBar from "./SearchBar";
 import { Bell, SquarePen } from "lucide-react";
@@ -27,15 +27,13 @@ const Header = (props) => {
       style={{ zIndex: 5 }}
     >
       <div
-        className={`relative w-full ${container} ${marginX} flex justify-between items-center ${paddingX} ${paddingY}`}
+        className={`w-full ${container} ${marginX} flex justify-between items-center ${paddingX} ${paddingY}`}
       >
         <div className="flex gap-4 items-center">
           <div className="text-3xl capitalize">
             <Link to="/">Medium</Link>
           </div>
-          {authUser && (
-            <SearchBar />
-          )}
+          {authUser && <SearchBar />}
         </div>
 
         <ul className={`flex items-center gap-7 capitalize ${linksFontSize}`}>
@@ -92,9 +90,8 @@ const Header = (props) => {
             </li>
           )}
         </ul>
-
-        {showProfileModal && <ProfileModal />}
       </div>
+      {showProfileModal && <ProfileModal />}
     </header>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { Toaster } from "react-hot-toast";
 import { Loader } from "lucide-react";
@@ -15,21 +15,39 @@ import ProfilePage from "./pages/ProfilePage";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
+  const location = useLocation();
 
+  // Ensure authentication check runs on mount
   useEffect(() => {
     checkAuth();
   }, []);
 
-  if (isCheckingAuth && !authUser)
+  // Display loader while checking auth
+  if (isCheckingAuth) {
     return (
       <div className="h-screen flex justify-center items-center">
         <Loader className="size-10 animate-spin" />
       </div>
     );
+  }
 
+  // Redirect unauthenticated users only when necessary
+  const protectedRoute = (element) =>
+    authUser ? (
+      authUser.isSelectedTopics ? (
+        element
+      ) : (
+        <Navigate to="/welcome" />
+      )
+    ) : (
+      <Navigate to="/welcome" state={{ from: location }} />
+    );
+
+    
   return (
     <>
       <Routes>
+        {/* Home route */}
         <Route
           path="/"
           element={
@@ -44,9 +62,19 @@ const App = () => {
             )
           }
         />
+
+        {/* Public routes */}
         <Route
           path="/welcome"
-          element={!authUser ? <WelcomePage /> : <Navigate to="/" />}
+          element={
+            !authUser ? (
+              <WelcomePage />
+            ) : location.state ? (
+              <Navigate to={location.state.from.pathname} />
+            ) : (
+              <Navigate to="/" />
+            )
+          }
         />
         <Route
           path="/get-started/topics"
@@ -62,30 +90,22 @@ const App = () => {
             )
           }
         />
-        <Route
-          path="/new-story"
-          element={authUser ? <NewStory /> : <Navigate to="/welcome" />}
-        />
 
+        {/* Authenticated routes */}
+        <Route path="/new-story" element={protectedRoute(<NewStory />)} />
         <Route
           path="/me/notifications"
-          element={authUser ? <NotificationsPage /> : <Navigate to="/welcome" />}
+          element={protectedRoute(<NotificationsPage />)}
         />
-
         <Route
           path="/explore-topics"
-          element={authUser ? <ExploreTopicsPage /> : <Navigate to="/welcome" />}
+          element={protectedRoute(<ExploreTopicsPage />)}
         />
-
-        <Route
-          path="/:username"
-          element={authUser ? <ProfilePage /> : <Navigate to="/welcome" />}
-        />
-
         <Route
           path="/:username/:titleSlug"
-          element={authUser ? <BlogDetailsPage /> : <Navigate to="/welcome" />}
+          element={protectedRoute(<BlogDetailsPage />)}
         />
+        <Route path="/:username" element={protectedRoute(<ProfilePage />)} />
       </Routes>
 
       <Toaster position="bottom-right" reverseOrder={false} />

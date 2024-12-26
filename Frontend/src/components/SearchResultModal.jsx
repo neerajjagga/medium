@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 const SearchResultModal = ({ handleMouseEnter, handleMouseLeave }) => {
   return (
     <div
-      className="w-[20rem] absolute z-5 left-0 -bottom-[4.3rem] shadow-lg bg-white"
+      className="w-[20rem] absolute z-5 left-0 -bottom-[4.3rem] shadow-box bg-white"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >

@@ -4,7 +4,7 @@ const {
   validateSignupData,
   validateLoginData,
 } = require("../utils/userValidation");
-const {obfuscateEmail} = require('../utils/obfuscateEmail');
+const { obfuscateEmail } = require("../utils/obfuscateEmail");
 
 const signupUser = async (req, res) => {
   try {
@@ -26,7 +26,7 @@ const signupUser = async (req, res) => {
     // Hash password
     const hassedPassword = bcrypt.hashSync(password, 10);
 
-    // generate obfuscate email 
+    // generate obfuscate email
     const obfuscatedEmailId = obfuscateEmail(emailId);
 
     // Create new user and save
@@ -51,18 +51,17 @@ const signupUser = async (req, res) => {
       secure: process.env.NODE_ENV !== "development",
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: { ...user._doc, password: undefined , emailId : undefined},
+      user: { ...user._doc, password: undefined, emailId: undefined },
     });
-
   } catch (error) {
     console.log(error);
     const statusCode = error.status || 500;
-    res.status(statusCode).json({
+    return res.status(statusCode).json({
       success: false,
-      message : error.message,
+      message: error.message,
     });
   }
 };
@@ -91,7 +90,7 @@ const userLogin = async (req, res) => {
       return res.status(401).json({
         success: false,
         message: "Invalid credentials",
-      }).select('-password');
+      });
     }
 
     // Generate JWT token
@@ -103,16 +102,16 @@ const userLogin = async (req, res) => {
       secure: process.env.NODE_ENV !== "development",
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Login successful",
-      user: { ...user._doc, password: undefined, emailId : undefined },
+      user: { ...user._doc, password: undefined, emailId: undefined },
     });
   } catch (error) {
     const statusCode = error.status || 500;
-    res.status(statusCode).json({
+    return res.status(statusCode).json({
       success: false,
-      message : "Login failed",
+      message: "Login failed",
       error: error.message,
     });
   }
@@ -134,12 +133,12 @@ const userLogout = async (req, res) => {
       secure: process.env.NODE_ENV !== "development",
     });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Logout successful",
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });
@@ -151,7 +150,7 @@ const checkAuth = (req, res) => {
     return res.status(200).json(req.user);
   } catch (error) {
     console.log(error);
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: error.message,
     });

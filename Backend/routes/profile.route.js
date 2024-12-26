@@ -17,8 +17,8 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 profileRouter.patch('/edit', userAuth, upload.single('profileImage'), updateProfile);
-profileRouter.get('/@:username', userAuth, getProfile);
-profileRouter.get('/@:username/following', userAuth, getFollowingUsers);
-profileRouter.get('/@:username/followers', userAuth, getFollowers);
+profileRouter.get('/:username', userAuth, getProfile);
+profileRouter.get('/:username/following', userAuth, getFollowingUsers);
+profileRouter.get('/:username/followers', userAuth, getFollowers);
 
 module.exports = {profileRouter};

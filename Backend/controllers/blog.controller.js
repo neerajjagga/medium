@@ -39,7 +39,7 @@ const createBlog = async (req, res) => {
             subtitle = content.slice(0, 150).trim().concat('...');  
         }
 
-        let secure_url = null;
+        let secure_url = "/assets/media/thumbnail.png";
 
         // if req.file
         if(req.file) {

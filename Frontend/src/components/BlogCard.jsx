@@ -1,6 +1,7 @@
 import { CircleMinus, Ellipsis } from "lucide-react";
 import React from "react";
 import { Link } from "react-router-dom";
+import { formatMongoDate } from "../lib/utils";
 
 const BlogCard = (props) => {
   const {
@@ -8,27 +9,16 @@ const BlogCard = (props) => {
     creator,
     subtitle,
     titleSlug,
-    thumbnail,
+    thumbnailUrl,
     publishAt,
     clapCount,
     postResponseCount,
   } = props.cardData;
 
-  const formatDate = (mongoDate) => {
-    const jsDate = new Date(mongoDate);
-
-    // Format the date to "17 Dec"
-    const options = { day: "numeric", month: "short" }; // Define the format
-    const formattedDate = new Intl.DateTimeFormat("en-US", options).format(
-      jsDate
-    );
-
-    return formattedDate;
-  };
 
   return (
     <li className="grid grid-cols-3 pt-3 pb-6 border-solid border-gray-200 border-b-[1px]">
-      <div>
+      <div className="mb-1.5">
         <Link to={`${creator.username}`} className="flex items-center gap-1.5 ">
           <img
             src={creator.profileImgUrl}
@@ -48,13 +38,13 @@ const BlogCard = (props) => {
           <h2 className="text-2xl tracking-tighter leading-7 font-bold capitalize text-neutral-800">
             {title}
           </h2>
-          <h3 className="text-[0.925rem] text-stone-500 leading-5">
+          <h3 className="text-[0.9rem] text-stone-500 leading-5">
             {subtitle}
           </h3>
         </div>
         <div className="col-span-4">
           <img
-            src={thumbnail}
+            src={thumbnailUrl}
             alt={title}
             className="object-cover rounded-sm"
           />
@@ -76,7 +66,7 @@ const BlogCard = (props) => {
               ></path>
             </svg>
             <span className="text-[0.75rem] text-stone-500">
-              {formatDate(publishAt)}
+              {formatMongoDate(publishAt)}
             </span>
           </div>
           <div className="flex gap-1 items-center">

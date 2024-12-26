@@ -26,6 +26,7 @@ const blogSchema = mongoose.Schema({
     },
     thumbnailUrl : {
         type : String,
+        default: "/assets/media/thumbnail.png"
     },
     claps : [{
         type : mongoose.Schema.Types.ObjectId,

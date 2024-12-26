@@ -29,11 +29,20 @@ const FeedContainer = () => {
   } = useFeedStore();
 
   useEffect(() => {
-    getForYouFeeds();
+    getForYouFeeds(page);
   }, []);
 
   useEffect(() => {
+    if (ulRef.current) {
+      setShowRightScrollButton(
+        ulRef.current.scrollWidth > ulRef.current.clientWidth
+      );
+    }
+  }, [ulRef]);
+
+  useEffect(() => {
     if (loading === true) {
+      console.log("Called!");
       if (activeTopic === "for you") {
         getForYouFeeds(page);
       } else if (activeTopic === "following") {
@@ -50,6 +59,10 @@ const FeedContainer = () => {
       setPage((prevValue) => prevValue + 1);
     }
   }, [loading]);
+
+  useEffect(() => {
+    console.log(allBlogsFetched);
+  }, [allBlogsFetched]);
 
   const handleScroll = (e) => {
     if (!ulRef.current) return;
@@ -90,17 +103,18 @@ const FeedContainer = () => {
   };
 
   const handleClick = (topic) => {
+    setLoading(false);
+    setBlogs([]);
+    setIsAllBlogsFetched(false);
     setActiveTopic(topic);
     setPage(1);
-    setBlogs([]);
-    setIsAllBlogsFetched(false)
 
-    if (topic === "following") {
-      getTopicRelatedFeeds("following", topic, page);
-    } else if (topic == "for you") {
-      getForYouFeeds(page);
+    if (topic === "for you") {
+      getForYouFeeds(1);
+    } else if (topic === "following") {
+      getTopicRelatedFeeds("following", topic, 1);
     } else {
-      getTopicRelatedFeeds("tag", topic, page);
+      getTopicRelatedFeeds("tag", topic, 1);
     }
   };
 
@@ -116,8 +130,6 @@ const FeedContainer = () => {
   };
 
   window.addEventListener("scroll", handlePageScroll);
-
-  console.log(page, loading, allBlogsFetched);
 
   return (
     <div className="flex flex-col">
@@ -194,7 +206,7 @@ const FeedContainer = () => {
           {blogs.map((blog, index) => {
             return <BlogCard key={index} cardData={blog} />;
           })}
-          {message && (
+          {message &&  (
             <h3 className="mt-4 text-base text-neutral-800 font-semibold">
               {message}
             </h3>

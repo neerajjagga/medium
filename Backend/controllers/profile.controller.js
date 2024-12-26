@@ -18,9 +18,9 @@ const getProfile = async (req, res) => {
         }
 
         // user safe data
-        const USER_SAFE_DATA = "name username bio profileImgUrl followersCount following followingCount blogs -_id"
-        const FOLLOWING_USER_SAFE_DATA = "name profileImgUrl followersCount bio -_id";
-        const BLOG_SAFE_DATA = "title subtitle thumbnail clapCount postResponseCount readingTime publishAt -_id";
+        const USER_SAFE_DATA = "name username bio profileImgUrl followersCount followers followingCount blogs -_id"
+        const FOLLOWING_USER_SAFE_DATA = "name username profileImgUrl followersCount bio -_id";
+        const BLOG_SAFE_DATA = "title subtitle thumbnailUrl clapCount postResponseCount readingTime publishAt -_id";
 
         // first only fetch first 5 following user
         const limit = 5;
@@ -49,7 +49,7 @@ const getProfile = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "User profile fetched successfully",
-            data: user,
+            user: user,
         })
 
     } catch (error) {

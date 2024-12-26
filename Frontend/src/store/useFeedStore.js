@@ -6,7 +6,7 @@ export const useFeedStore = create((set, get) => ({
   blogs: [],
   isGettingFeeds: false,
   allBlogsFetched: false,
-  message: "",
+  message: null,
 
   setBlogs: (data) => set({ blogs: data }),
   setIsAllBlogsFetched: (value) => set({ allBlogsFetched: value }),
@@ -24,16 +24,12 @@ export const useFeedStore = create((set, get) => ({
         `/feed/for-you?page=${page}&limit=${limit}`
       );
 
-      console.log(res.data);
-      if (!res.data.blogs) {
-        return set({ message: res.data.message });
-      }
-
       set({
-        blogs: [...res.data.blogs, ...get().blogs],
+        blogs: [...get().blogs, ...res.data.blogs],
         allBlogsFetched: res.data.allBlogsFetched,
-        message: "",
+        message: res.data.message,
       });
+      
     } catch (error) {
       toast.error(error.response.data.message);
     } finally {
@@ -56,15 +52,14 @@ export const useFeedStore = create((set, get) => ({
         `feed/?type=${type}&tag=${topic}&page=${page}&limit=${limit}`
       );
 
-      console.log(res.data);
       if (!res.data.blogs) {
-        return set({ message: res.data.message });
+        return set({ message: res.data.message, allBlogsFetched: res.data.allBlogsFetched });
       }
 
       set({
-        blogs: [...res.data.blogs, ...get().blogs],
+        blogs: [...get().blogs, ...res.data.blogs],
         allBlogsFetched: res.data.allBlogsFetched,
-        message: "",
+        message: res.data.message,
       });
     } catch (error) {
       toast.error(error.response.data.message);

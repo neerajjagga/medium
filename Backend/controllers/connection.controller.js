@@ -15,14 +15,14 @@ const followUser = async(req, res) => {
         // find the user
         const userToFollow = await User.findOne({username : userToFollowUsername});
         if(!userToFollow) {
-            return res.status(404).json({
+            return res.status(400).json({
                 success : false,
                 message : "Invaid username"
             })
         }
 
         if (loggedInUser.following.includes(userToFollow._id)) {
-            return res.status(409).json({
+            return res.status(400).json({
                 success : false,
                 message: `You are already following ${userToFollowUsername}.`
             });
@@ -41,7 +41,7 @@ const followUser = async(req, res) => {
             $inc: { followersCount: 1 }
         });
 
-        res.status(201).json({
+        res.status(200).json({
             success : true,
             message : `You are now following ${userToFollowUsername}`
         });
@@ -71,7 +71,7 @@ const unfollowUser = async(req, res) => {
         // check is the user valid or not
         const user = await User.findOne({username : usernameToUnfollow});
         if(!user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 success : false,
                 message : "Invalid username"
             })
@@ -101,7 +101,7 @@ const unfollowUser = async(req, res) => {
 
         res.status(200).json({
             success : true,
-            message : `You successfully unfollowed ${usernameToUnfollow}`
+            message : `You successfully unfollow ${usernameToUnfollow}`
         })
 
     } catch (error) {

@@ -1,104 +1,110 @@
-const mongoose = require('mongoose');
-const jwt = require('jsonwebtoken');
-const dotenv = require('dotenv');
+const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const dotenv = require("dotenv");
 
 dotenv.config();
 const jwt_secret_key = process.env.JWT_SECRET_KEY;
 
-const userSchema = mongoose.Schema({
+const userSchema = mongoose.Schema(
+  {
     name: {
-        type: String,
-        required: true,
-        minLength: 3,
-        maxLength: 25,
-        trim: true,
+      type: String,
+      required: true,
+      minLength: 3,
+      maxLength: 25,
+      trim: true,
     },
     username: {
-        type: String,
-        required: true,
-        unique: true,
-        minLength: 5,
-        maxLength: 15,
-        trim: true,
+      type: String,
+      required: true,
+      unique: true,
+      minLength: 5,
+      maxLength: 15,
+      trim: true,
     },
     emailId: {
-        type: String,
-        required: true,
-        unique: true,
-        trim: true,
-        lowercase: true,
-        match: [
-            /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
-            "Please enter a valid email address",
-        ],
+      type: String,
+      required: true,
+      unique: true,
+      trim: true,
+      lowercase: true,
+      match: [
+        /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+        "Please enter a valid email address",
+      ],
     },
-    obfuscatedEmailId : {
-        type : String,
+    obfuscatedEmailId: {
+      type: String,
     },
     password: {
-        type: String,
-        required: true,
-        minLength: 8,
-        trim: true,
+      type: String,
+      required: true,
+      minLength: 8,
+      trim: true,
     },
     bio: {
-        type: String,
-        default: "",
-        maxLength: 200,
-        trim: true,
+      type: String,
+      default: "",
+      maxLength: 200,
+      trim: true,
     },
     profileImgUrl: {
-        type: String,
-        default: "/assets/media/avatar.png",
+      type: String,
+      default: "/assets/media/avatar.png",
     },
-    followers: [{
+    followers: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User'
-    }],
+        ref: "User",
+      },
+    ],
     followersCount: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
-    following: [{
+    following: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-    }],
+        ref: "User",
+      },
+    ],
     followingCount: {
-        type: Number,
-        default: 0
+      type: Number,
+      default: 0,
     },
     isSelectedTopics: {
-        type: Boolean,
-        default: false,
+      type: Boolean,
+      default: false,
     },
     interestedTopics: {
-        type: [String],
+      type: [String],
     },
-    blogs: [{
+    blogs: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Blog'
-    }],
+        ref: "Blog",
+      },
+    ],
     createdAt: {
-        type: Date,
-        default: Date.now,
+      type: Date,
+      default: Date.now,
     },
-},
-    {
-        timestamps: true
-    });
+  },
+  {
+    timestamps: true,
+  }
+);
 
 userSchema.methods.getToken = async function () {
-    const user = this;
-    const token = jwt.sign(
-        { _id: user._id.toString() }, 
-        jwt_secret_key, 
-        { expiresIn: '7d' }
-    );
-    return token;
-}
+  const user = this;
+  const token = jwt.sign({ _id: user._id.toString() }, jwt_secret_key, {
+    expiresIn: "7d",
+  });
+  return token;
+};
 
-const User = new mongoose.model('User', userSchema);
+const User = new mongoose.model("User", userSchema);
 
 module.exports = {
-    User
-}
+  User,
+};

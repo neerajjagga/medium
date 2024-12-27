@@ -42,7 +42,6 @@ const FeedContainer = () => {
 
   useEffect(() => {
     if (loading === true) {
-      console.log("Called!");
       if (activeTopic === "for you") {
         getForYouFeeds(page);
       } else if (activeTopic === "following") {
@@ -59,10 +58,6 @@ const FeedContainer = () => {
       setPage((prevValue) => prevValue + 1);
     }
   }, [loading]);
-
-  useEffect(() => {
-    console.log(allBlogsFetched);
-  }, [allBlogsFetched]);
 
   const handleScroll = (e) => {
     if (!ulRef.current) return;
@@ -133,9 +128,9 @@ const FeedContainer = () => {
 
   return (
     <div className="flex flex-col">
-      <div className="flex gap-2 items-center border-solid border-b-[1px] border-grey-200">
+      <div className="sticky w-full top-0 bg-white flex gap-2 items-center border-solid border-b-[1px] border-grey-200">
         {showLeftScrollButton && (
-          <div className="pb-[0.6rem] pt-1">
+          <div className="pt-[0.55rem]">
             <button className="text-neutral-600 hover:text-black">
               <ChevronLeft
                 className="size-5"
@@ -152,7 +147,7 @@ const FeedContainer = () => {
           onScroll={handleScroll}
           ref={ulRef}
         >
-          <li className="pb-[0.6rem] pt-1">
+          <li className="pt-[0.55rem]">
             <button className="rounded-full hover:bg-[#f5f5f5]">
               <Plus className="size-5" absoluteStrokeWidth={true} size={40} />
             </button>
@@ -163,7 +158,7 @@ const FeedContainer = () => {
               return (
                 <li
                   key={index}
-                  className={`pb-3.5 ${
+                  className={`py-3.5 ${
                     topic !== "for you" && topic !== "following"
                       ? "order-1"
                       : ""
@@ -184,7 +179,7 @@ const FeedContainer = () => {
             })}
         </ul>
         {showRightScrollButton && (
-          <div className="pb-[0.6rem] pt-1 order-2">
+          <div className="pt-[0.55rem] order-2">
             <button className="text-neutral-600 hover:text-black">
               <ChevronRight
                 className="size-5"

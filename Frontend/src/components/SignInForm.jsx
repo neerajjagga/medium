@@ -91,6 +91,7 @@ const SignInForm = (props) => {
           onChange={(e) =>
             setFormData({ ...formData, usernameOrEmail: e.target.value })
           }
+          name="email"
           required
         />
         <Mail className="size-5 absolute top-[50%] translate-y-[-50%] left-2.5 text-neutral-600" />

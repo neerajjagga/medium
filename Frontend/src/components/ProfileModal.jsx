@@ -1,10 +1,19 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { User } from "lucide-react";
 
-const ProfileModal = () => {
+const ProfileModal = ({
+  handleMouseDown,
+  profileModalRef
+}) => {
   const { authUser, logout } = useAuthStore();
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleMouseDown);
+    return () => {
+      document.addEventListener("mousedown", handleMouseDown);
+    }
+  }, []);
 
   const handleClick = () => {
     logout();
@@ -12,8 +21,9 @@ const ProfileModal = () => {
 
   return (
     <div
-      className="w-64 absolute right-0 -bottom-[13rem] shadow-box bg-white flex flex-col rounded-sm"
+      className="w-64 absolute right-0 -bottom-[9rem] shadow-box bg-white flex flex-col rounded-sm"
       style={{ zIndex: 10 }}
+      ref={profileModalRef}
     >
       <ul className="flex flex-col gap-4 p-5 border-solid border-b-[1px] border-gray-100">
         <li>
@@ -24,16 +34,6 @@ const ProfileModal = () => {
             <User className="size-6" absoluteStrokeWidth={true} size={64} />
             <span className="text-[0.9rem]">Profile</span>
           </a>
-        </li>
-      </ul>
-      <ul className="flex flex-col gap-4 p-5 border-solid border-b-[1px] border-gray-200">
-        <li className="ml-1">
-          <Link
-            to={authUser.username}
-            className="block text-neutral-600 hover:text-black text-[0.9rem]"
-          >
-            Settings
-          </Link>
         </li>
       </ul>
       <ul className="flex flex-col gap-4 p-5 border-solid border-b-[1px] border-gray-200">

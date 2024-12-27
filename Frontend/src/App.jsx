@@ -12,6 +12,7 @@ import NotificationsPage from "./pages/NotificationsPage";
 import ExploreTopicsPage from "./pages/ExploreTopicsPage";
 import BlogDetailsPage from "./pages/BlogDetailsPage";
 import ProfilePage from "./pages/ProfilePage";
+import ConnectionsPage from "./pages/ConnectionsPage";
 
 const App = () => {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -43,7 +44,6 @@ const App = () => {
       <Navigate to="/welcome" state={{ from: location }} />
     );
 
-    
   return (
     <>
       <Routes>
@@ -101,11 +101,19 @@ const App = () => {
           path="/explore-topics"
           element={protectedRoute(<ExploreTopicsPage />)}
         />
+        <Route path="/:username" element={protectedRoute(<ProfilePage />)} />
+        <Route
+          path="/:username/following"
+          element={protectedRoute(<ConnectionsPage />)}
+        />
+        <Route
+          path="/:username/followers"
+          element={protectedRoute(<ConnectionsPage />)}
+        />
         <Route
           path="/:username/:titleSlug"
           element={protectedRoute(<BlogDetailsPage />)}
         />
-        <Route path="/:username" element={protectedRoute(<ProfilePage />)} />
       </Routes>
 
       <Toaster position="bottom-right" reverseOrder={false} />

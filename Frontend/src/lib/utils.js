@@ -23,16 +23,10 @@ export function formatMongoDate(dateString) {
 
   // If within the last week, return relative time
   if (differenceInDays >= 0 && differenceInDays < 7) {
-    return `${
-      differenceInDays === 0
-        ? "Today"
-        : `${differenceInDays}d ago`
-    }`;
+    return `${differenceInDays === 0 ? "Today" : `${differenceInDays}d ago`}`;
   }
 
-  // Otherwise, return formatted date as 17Dec
-  const options = { day: "numeric", month: "short" }; // Format: 17Dec
-  return date.toLocaleDateString("en-US", options).replace(" ", "");
+  // Otherwise, return formatted date as "17 Dec 2024"
+  const options = { day: "numeric", month: "short", year: "numeric" }; // Format: 17 Dec 2024
+  return date.toLocaleDateString("en-US", options).replace(",", ""); // Ensure there are no unnecessary commas
 }
-
-

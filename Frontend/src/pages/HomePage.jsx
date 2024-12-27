@@ -19,10 +19,10 @@ const HomePage = () => {
       <main className="flex-grow">
         <div className="md:max-w-[1328px] md:mx-auto">
           <div className="flex justify-evenly">
-            <div className="feed-container max-w-[728px] p-8 min-h-screen">
+            <div className="max-w-[728px] p-4 min-h-screen custom-md:w-full custom-md:max-w-full">
               <FeedContainer />
             </div>
-            <div className="sidebar max-w-[368px] border-solid border-l-[1px] border-grey-200 p-8">
+            <div className="max-w-[368px] border-solid border-l-[1px] border-grey-200 p-8 custom-md:hidden">
               <Sidebar />
             </div>
           </div>

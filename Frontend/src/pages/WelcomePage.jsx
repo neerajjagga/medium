@@ -32,7 +32,7 @@ const WelcomePage = () => {
             </button>
           </div>
         </div>
-        <div className="brand-image absolute -top-9 -right-2">
+        <div className="absolute -top-9 -right-2 custom-md:hidden">
           <img
             src="/assets/media/hero.webp"
             alt="Brand Image"

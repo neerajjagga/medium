@@ -17,17 +17,3 @@
         right: -16rem;
     }
 }
-
-@media (max-width: 903px){
-    .brand-image{
-        display: none;
-    }
-
-    .feed-container{
-        width: 100%;
-    }
-
-    .sidebar{
-        display: none;
-    }
-}

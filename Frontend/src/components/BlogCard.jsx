@@ -15,32 +15,34 @@ const BlogCard = (props) => {
     postResponseCount,
   } = props.cardData;
 
-
   return (
     <li className="grid grid-cols-3 pt-3 pb-6 border-solid border-gray-200 border-b-[1px]">
-      <div className="mb-1.5">
-        <Link to={`${creator.username}`} className="flex items-center gap-1.5 ">
-          <img
-            src={creator.profileImgUrl}
-            alt={creator.name}
-            className="size-5 object-cover rounded-md hover:shadow-sm"
-          />
-          <span className="text-[0.8rem] mb-[0.2rem] capitalize hover:underline">
-            {creator.name}
-          </span>
-        </Link>
-      </div>
-      <Link
-        to={`${creator.username}/${titleSlug}`}
+      {creator && (
+        <div className="mb-1.5">
+          <Link
+            to={`${creator.username}`}
+            className="flex items-center gap-1.5 "
+          >
+            <img
+              src={creator.profileImgUrl}
+              alt={creator.name}
+              className="size-5 object-cover rounded-md hover:shadow-sm"
+            />
+            <span className="text-[0.8rem] mb-[0.2rem] capitalize hover:underline">
+              {creator.name}
+            </span>
+          </Link>
+        </div>
+      )}
+      <a
+        href={`${creator ? creator.username : props.username}/${titleSlug}`}
         className="col-span-3 grid grid-cols-12 justify-between gap-8"
       >
         <div className="col-span-8 flex flex-col gap-2 justify-center">
           <h2 className="text-2xl tracking-tighter leading-7 font-bold capitalize text-neutral-800">
             {title}
           </h2>
-          <h3 className="text-[0.9rem] text-stone-500 leading-5">
-            {subtitle}
-          </h3>
+          <h3 className="text-[0.9rem] text-stone-500 leading-5">{subtitle}</h3>
         </div>
         <div className="col-span-4">
           <img
@@ -49,7 +51,7 @@ const BlogCard = (props) => {
             className="object-cover rounded-sm"
           />
         </div>
-      </Link>
+      </a>
       <div className="col-span-2 flex justify-between items-center mt-2 gap-2">
         <div className="flex gap-4 items-center">
           <div className="flex gap-3 items-center">
@@ -104,13 +106,15 @@ const BlogCard = (props) => {
           </div>
         </div>
         <div className="flex gap-8 items-center">
-          <button className="text-stone-500 hover:text-black">
-            <CircleMinus
-              className="size-5"
-              absoluteStrokeWidth={true}
-              size={40}
-            />
-          </button>
+          {creator && (
+            <button className="text-stone-500 hover:text-black">
+              <CircleMinus
+                className="size-5"
+                absoluteStrokeWidth={true}
+                size={40}
+              />
+            </button>
+          )}
           <button className="text-stone-500 hover:text-neutral-800">
             <i className="fa fa-bookmark-o" aria-hidden="true"></i>
           </button>

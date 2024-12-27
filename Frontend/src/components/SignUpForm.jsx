@@ -108,6 +108,7 @@ const SignUpForm = () => {
           placeholder="Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+          name="name"
           required
         />
         <ContactRound className="size-5 absolute top-[50%] translate-y-[-50%] left-2.5 text-neutral-600" />
@@ -121,6 +122,7 @@ const SignUpForm = () => {
           onChange={(e) =>
             setFormData({ ...formData, username: e.target.value })
           }
+          name="username"
           required
         />
         <UserRoundPen className="size-5 absolute top-[50%] translate-y-[-50%] left-2.5 text-neutral-600" />
@@ -135,6 +137,7 @@ const SignUpForm = () => {
           onChange={(e) =>
             setFormData({ ...formData, emailId: e.target.value })
           }
+          name="email"
           required
         />
         <Mail className="size-5 absolute top-[50%] translate-y-[-50%] left-2.5 text-neutral-600" />

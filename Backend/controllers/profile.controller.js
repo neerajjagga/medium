@@ -7,7 +7,6 @@ const { uploadImageOnCloudinary } = require('../utils/cloudinary.utility');
 const getProfile = async (req, res) => {
     try {
         // return the profile
-        const loggedInUser = req.user;
         const username = req.params.username;
 
         if (!username) {
@@ -18,9 +17,8 @@ const getProfile = async (req, res) => {
         }
 
         // user safe data
-        const USER_SAFE_DATA = "name username bio profileImgUrl followersCount followers followingCount blogs -_id"
+        const USER_SAFE_DATA = "name username bio profileImgUrl followersCount followers followingCount _id createdAt"
         const FOLLOWING_USER_SAFE_DATA = "name username profileImgUrl followersCount bio -_id";
-        const BLOG_SAFE_DATA = "title subtitle thumbnailUrl clapCount postResponseCount readingTime publishAt -_id";
 
         // first only fetch first 5 following user
         const limit = 5;
@@ -35,11 +33,10 @@ const getProfile = async (req, res) => {
                 select: FOLLOWING_USER_SAFE_DATA,
                 options: { limit: limit, skip: skip }
             })
-            .populate('blogs', BLOG_SAFE_DATA)
             .exec()
 
         if (!user) {
-            return res.status(404).json({
+            return res.status(400).json({
                 success: false,
                 message: `User with username '${username}' not found.`
             })
@@ -75,7 +72,7 @@ const getFollowingUsers = async (req, res) => {
         }
 
         // max 10 users data fetched at a time
-        const { limit, skip } = getPagination(req, 15);
+        const { limit, skip } = getPagination(req, 10);
 
         // extract following users data
         const followingUsers = await User
@@ -98,7 +95,7 @@ const getFollowingUsers = async (req, res) => {
         res.status(200).json({
             success: true,
             message: "Following users fetched successfully",
-            data: followingUsers
+            users: followingUsers
         })
 
     } catch (error) {
@@ -124,7 +121,7 @@ const getFollowers = async (req, res) => {
         }
 
         // max 10 users data fetched at a time
-        const { limit, skip } = getPagination(req, 15);
+        const { limit, skip } = getPagination(req, 10);
 
         // extract followers users data
         const followers = await User
@@ -218,7 +215,7 @@ const updateProfile = async (req, res) => {
             { _id: loggedInUser._id }, 
             updateData, 
             { new: true }
-        ).select('-password -_id');
+        ).select('-password');
 
         return res.status(200).json({
             success: true,

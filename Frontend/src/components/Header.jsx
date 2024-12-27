@@ -21,9 +21,27 @@ const Header = (props) => {
 
   const [showProfileModal, setShowProfileModal] = useState(false);
 
+  const profileModalRef = useRef(null);
+  const profileImgRef = useRef(null);
+
+  const handleMouseDown = (e) => {
+    if (
+      profileImgRef.current &&
+      profileModalRef.current &&
+      !profileModalRef.current.contains(e.target) &&
+      !profileImgRef.current.contains(e.target)
+    ) {
+      setShowProfileModal((prev) => !prev);
+    }
+  };
+
+  useEffect(() => {
+    console.log(profileModalRef, profileImgRef);
+  }, [profileModalRef, profileImgRef]);
+
   return (
     <header
-      className={`${bgColor} w-full sticky top-0 border-b-[1px] border-solid ${borderColor}`}
+      className={`${bgColor} w-full relative border-b-[1px] border-solid ${borderColor}`}
       style={{ zIndex: 5 }}
     >
       <div
@@ -65,7 +83,10 @@ const Header = (props) => {
           {authUser && (
             <li
               className="rounded-full cursor-pointer hover:shadow-sm"
-              onClick={() => setShowProfileModal((prev) => !prev)}
+              onClick={() => {
+                setShowProfileModal((prev) => !prev);
+              }}
+              ref={profileImgRef}
             >
               <img
                 className="size-8 object-cover"
@@ -91,7 +112,12 @@ const Header = (props) => {
           )}
         </ul>
       </div>
-      {showProfileModal && <ProfileModal />}
+      {showProfileModal && (
+        <ProfileModal
+          profileModalRef={profileModalRef}
+          handleMouseDown={handleMouseDown}
+        />
+      )}
     </header>
   );
 };

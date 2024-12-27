@@ -4,10 +4,7 @@ export default {
   theme: {
     extend: {
       screens: {
-        sm: "480px",
-        md: "768px",
-        lg: "904px",
-        xl: "1440px",
+        'custom-md': { 'max': '903px' }, // Custom breakpoint for max-width 903px
       },
       colors: {
         primary: "#F7F4ED",

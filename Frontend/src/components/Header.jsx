@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import SearchBar from "./SearchBar";
-import { Bell, SquarePen } from "lucide-react";
+import { Bell, Search, SquarePen } from "lucide-react";
 import { Link } from "react-router-dom";
 import ProfileModal from "./ProfileModal";
 
@@ -35,13 +35,11 @@ const Header = (props) => {
     }
   };
 
-  useEffect(() => {
-    console.log(profileModalRef, profileImgRef);
-  }, [profileModalRef, profileImgRef]);
-
   return (
     <header
-      className={`${bgColor} w-full relative border-b-[1px] border-solid ${borderColor}`}
+      className={`${
+        bgColor && bgColor
+      } w-full relative border-b-[1px] border-solid ${borderColor}`}
       style={{ zIndex: 5 }}
     >
       <div
@@ -69,6 +67,15 @@ const Header = (props) => {
               </span>
             </Link>
           </li>
+          <li className="block sm:hidden">
+              <Link to="/explore-topics">
+                <Search
+                  className="size-5 text-neutral-800 group-hover:text-black"
+                  absoluteStrokeWidth={true}
+                  size={40}
+                />
+              </Link>
+            </li>
           {authUser && (
             <li>
               <Link to="/me/notifications" className="group">

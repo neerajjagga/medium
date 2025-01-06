@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Check, Plus, Loader2, Loader } from "lucide-react";
 import toast from "react-hot-toast";
 import { useTagsStore } from "../store/useTagsStore";
+import { deleteArrayElement } from "../lib/utils";
 
 const SelectTagsPage = () => {
   const [selectedTags, setSelectedTags] = useState([]);
@@ -14,13 +15,6 @@ const SelectTagsPage = () => {
   useEffect(() => {
     getTags();
   }, []);
-
-  function deleteArrayElement(array, element) {
-    let arrayClone = [...array];
-    let index = arrayClone.findIndex((item) => item === element);
-    if (index !== -1) arrayClone.splice(index, 1);
-    return arrayClone;
-  }
 
   const handleClick = (tag) => {
     if (selectedTags.includes(tag)) {

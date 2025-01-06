@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Ellipsis } from "lucide-react";
 import { formatFollowers } from "../lib/utils";
 import { useProfileStore } from "../store/useProfileStore";
 import { useAuthStore } from "../store/useAuthStore";
+import {Link} from "react-router-dom";
 
 const ProfileSidebar = ({ profileData }) => {
   const { followUser, unfollowUser } = useProfileStore();
@@ -99,8 +100,8 @@ const ProfileSidebar = ({ profileData }) => {
                     key={index}
                   >
                     <div>
-                      <a
-                        href={`/${user.username}`}
+                      <Link
+                        to={`/${user.username}`}
                         className="flex items-center gap-2.5 hover:underline"
                       >
                         <img
@@ -109,7 +110,7 @@ const ProfileSidebar = ({ profileData }) => {
                           alt={user.name}
                         />
                         <span className="text-[0.8rem]">{user.name}</span>
-                      </a>
+                      </Link>
                     </div>
                     <button className="px-[0.35rem] py-[0.4rem] rounded-md text-stone-500 hover:text-neutral-800 hover:bg-gray-100">
                       <Ellipsis className="size-5" />
@@ -119,12 +120,12 @@ const ProfileSidebar = ({ profileData }) => {
               })}
             </ul>
             {profileData.following.length === 5 && (
-              <a
-                href={`/${profileData.username}/following`}
+              <Link
+                to={`/${profileData.username}/following`}
                 className="ms-1 text-[0.775rem] text-neutral-700 tracking-tight hover:text-black hover:underline"
               >
                 See all {`(${profileData.followingCount})`}
-              </a>
+              </Link>
             )}
           </div>
         )}

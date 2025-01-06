@@ -9,7 +9,7 @@ export const useFeedStore = create((set, get) => ({
   message: null,
 
   setBlogs: (data) => set({ blogs: data }),
-  setIsAllBlogsFetched: (value) => set({ allBlogsFetched: value }),
+  setAllBlogsFetched: (value) => set({ allBlogsFetched: value }),
 
   getForYouFeeds: async (page = 1, limit = 10) => {
     if (get().allBlogsFetched) {

@@ -27,7 +27,7 @@ const SearchBar = () => {
   }
 
   return (
-    <div className="relative">
+    <div className="hidden relative sm:block">
       <input
         type="text"
         placeholder="Search"

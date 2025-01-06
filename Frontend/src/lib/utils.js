@@ -30,3 +30,23 @@ export function formatMongoDate(dateString) {
   const options = { day: "numeric", month: "short", year: "numeric" }; // Format: 17 Dec 2024
   return date.toLocaleDateString("en-US", options).replace(",", ""); // Ensure there are no unnecessary commas
 }
+
+// Delete given element from array
+export function deleteArrayElement(array, element) {
+  let arrayClone = [...array];
+  let index = arrayClone.findIndex((item) => item === element);
+  if (index !== -1) arrayClone.splice(index, 1);
+  return arrayClone;
+}
+
+// Triggered given function only after a specified delay
+export function debounce(func, delay) {
+  let timeout;
+
+  return function (...args) {
+    clearTimeout(timeout);
+    timeout = setTimeout(() => {
+      func.apply(this, args);
+    }, delay);
+  };
+}

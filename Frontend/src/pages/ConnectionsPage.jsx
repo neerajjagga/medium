@@ -1,49 +1,40 @@
-import React, {useState, useEffect} from "react";
+import React, { useEffect } from "react";
 import Header from "../components/Header";
 import ProfileSidebar from "../components/ProfileSidebar";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useProfileStore } from "../store/useProfileStore";
 import ProfileSidebarSkeleton from "../components/Skeleton/ProfileSidebarSkeleton";
-import { useAuthStore } from "../store/useAuthStore";
+import ConnectionsContainer from "../components/ConnectionsContainer";
 
-const ConnectionsPage = () => {
+const ConnectionsPage = (props) => {
   const { pathname } = useLocation();
+
+  const { username } = useParams();
 
   const {
     profileData,
     isGettingProfile,
     isProfileFetched,
-    setIsProfileFetched,
     getProfile,
-    followUser,
-    unfollowUser,
+    setProfileData,
+    setIsProfileFetched,
+    getConnectionUsers,
+    setUsers,
+    setIsUsersFetched,
+    setAllUsersFetched,
   } = useProfileStore();
 
-  const { authUser } = useAuthStore();
-  const [isFollowing, setIsFollowing] = useState(null);
-
-
   useEffect(() => {
-    getProfile('/' + pathname.split('/')[1]);
-    return setIsProfileFetched(false);
-  }, []);
-
-  useEffect(() => {
-    if (isProfileFetched) {
-      setIsFollowing(profileData.followers.includes(authUser._id));
-    }
-  }, [profileData]);
-
-  const handleClick = async () => {
-    if (isFollowing) {
-      await unfollowUser(profileData.username);
-    } else {
-      await followUser(profileData.username);
-    }
-    setIsProfileFetched(false);
-    setIsFollowing((prev) => !prev);
-    getProfile(pathname);
-  };
+    getProfile(username);
+    getConnectionUsers(pathname.split("/")[2], username, 1);
+    return () => {
+      setProfileData(null);
+      setIsProfileFetched(false);
+      setUsers([]);
+      setIsUsersFetched(false);
+      setAllUsersFetched(false);
+    };
+  }, [username]);
 
   return (
     <div className="flex flex-col min-h-screen">
@@ -57,17 +48,17 @@ const ConnectionsPage = () => {
       <main className="flex-grow">
         <div className="md:max-w-[1328px] md:mx-auto">
           <div className="flex justify-evenly custom-md:flex-col">
-            <div className="max-w-[728px] p-8 min-h-screen custom-md:order-2"></div>
-            <div className="sidebar max-w-[368px] border-solid border-l-[1px] border-grey-200 p-8 flex flex-col gap-4">
-              {isGettingProfile && <ProfileSidebarSkeleton />}
+            <div className="w-[728px] p-8 pt-12 custom-md:w-full custom-md:order-2 custom-md:pt-0 custom-md:max-w-full">
               {isProfileFetched && (
-                <ProfileSidebar
-                  authUser={authUser}
+                <ConnectionsContainer
+                  connectionType={pathname.split("/")[2]}
                   profileData={profileData}
-                  isFollowing={isFollowing}
-                  handleClick={handleClick}
                 />
               )}
+            </div>
+            <div className="max-w-[368px] w-full sticky -top-[4.5rem] h-fit border-solid border-l-[1px] border-grey-200 p-8 flex flex-col gap-4 custom-md:max-w-full custom-md:static">
+              {isGettingProfile && <ProfileSidebarSkeleton />}
+              {isProfileFetched && <ProfileSidebar profileData={profileData} />}
             </div>
           </div>
         </div>

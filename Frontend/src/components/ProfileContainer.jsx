@@ -2,7 +2,8 @@ import { Ellipsis, Loader2 } from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { useProfileStore } from "../store/useProfileStore";
 import BlogCard from "./BlogCard";
-import { formatFollowers, formatMongoDate } from "../lib/utils";
+import { debounce, formatFollowers, formatMongoDate } from "../lib/utils";
+import { Link } from "react-router-dom";
 
 const ProfileContainer = ({ profileData }) => {
   const [activeTag, setActiveTag] = useState("home");
@@ -12,27 +13,37 @@ const ProfileContainer = ({ profileData }) => {
     message,
     isGettingBlogs,
     allBlogsFetched,
-    isBlogsFetched,
     getUserBlogs,
+    setBlogs,
+    setAllBlogsFetched,
   } = useProfileStore();
 
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    getUserBlogs(profileData._id, page);
+    setBlogs(profileData.blogs);
+    window.scrollTo({ top: 0 });
+    window.addEventListener("scroll", debounce(handlePageScroll, 75));
+    return () => {
+      setBlogs([]);
+      setAllBlogsFetched(false);
+      window.removeEventListener("scroll", debounce(handlePageScroll, 75));
+    };
   }, []);
 
   useEffect(() => {
     if (loading === true) {
       getUserBlogs(profileData._id, page);
     }
+    return () => setLoading(false);
   }, [page]);
 
   useEffect(() => {
     if (loading === true && !allBlogsFetched) {
       setPage((prevValue) => prevValue + 1);
     }
+    console.log("Loading: ", loading, "All Blogs Fetched: ", allBlogsFetched);
   }, [loading]);
 
   const handlePageScroll = (e) => {
@@ -45,8 +56,6 @@ const ProfileContainer = ({ profileData }) => {
       }
     }
   };
-
-  window.addEventListener("scroll", handlePageScroll);
 
   return (
     <div className="flex flex-col gap-8">
@@ -84,7 +93,7 @@ const ProfileContainer = ({ profileData }) => {
           <Loader2 className="size-8 animate-spin" />
         </div>
       )}
-      {activeTag === "home" && isBlogsFetched && (
+      {activeTag === "home" && (
         <ul className="flex flex-col gap-3">
           {blogs.map((blog, index) => {
             return (
@@ -95,9 +104,9 @@ const ProfileContainer = ({ profileData }) => {
               />
             );
           })}
-          {message && (
+          {(message || blogs.length === 0) && (
             <h3 className="mt-4 text-base text-neutral-800 font-semibold">
-              {message}
+              {message ? message : "No blog is created yet!"}
             </h3>
           )}
         </ul>
@@ -111,18 +120,18 @@ const ProfileContainer = ({ profileData }) => {
             {profileData.bio}
           </p>
           <div className="flex gap-6">
-            <a
-              href={`/${profileData.username}/followers`}
+            <Link
+              to={`/${profileData.username}/followers`}
               className="text-[0.85rem] text-green-600 capitalize font-medium tracking-tight hover:text-green-800"
             >
               {formatFollowers(profileData.followersCount)} Followers
-            </a>
-            <a
-              href={`/${profileData.username}/following`}
+            </Link>
+            <Link
+              to={`/${profileData.username}/following`}
               className="text-[0.85rem] text-green-600 capitalize font-medium tracking-tight hover:text-green-800"
             >
               {formatFollowers(profileData.followingCount)} Following
-            </a>
+            </Link>
           </div>
           <div className="h-[1px] bg-black w-full mt-8"></div>
         </div>

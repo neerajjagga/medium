@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { User } from "lucide-react";
+import { Link } from "react-router-dom";
 
 const ProfileModal = ({
   handleMouseDown,
@@ -27,13 +28,13 @@ const ProfileModal = ({
     >
       <ul className="flex flex-col gap-4 p-5 border-solid border-b-[1px] border-gray-100">
         <li>
-          <a
-            href={`/${authUser.username}`}
+          <Link
+            to={`/${authUser.username}`}
             className="flex gap-3.5 items-center text-neutral-600 hover:text-black"
           >
             <User className="size-6" absoluteStrokeWidth={true} size={64} />
             <span className="text-[0.9rem]">Profile</span>
-          </a>
+          </Link>
         </li>
       </ul>
       <ul className="flex flex-col gap-4 p-5 border-solid border-b-[1px] border-gray-200">

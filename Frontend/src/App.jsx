@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Navigate, Route, Routes, useLocation, Outlet } from "react-router-dom";
 import { useAuthStore } from "./store/useAuthStore";
 import { Toaster } from "react-hot-toast";
 import { Loader } from "lucide-react";
@@ -32,17 +32,21 @@ const App = () => {
     );
   }
 
-  // Redirect unauthenticated users only when necessary
-  const protectedRoute = (element) =>
-    authUser ? (
-      authUser.isSelectedTopics ? (
-        element
-      ) : (
-        <Navigate to="/welcome" />
-      )
-    ) : (
-      <Navigate to="/welcome" state={{ from: location }} />
-    );
+  const ProtectedRoute = (element ) => {
+    const location = useLocation();
+  
+    if (!authUser) {
+      // Pass the current location to the state for future redirection
+      return <Navigate to="/welcome" state={{ from: location }} />;
+    }
+  
+    if (!authUser.isSelectedTopics) {
+      return <Navigate to="/welcome" />;
+    }
+  
+    // Clone the element and pass the location as a prop
+    return React.cloneElement(element, { previousLocation: location });
+  };
 
   return (
     <>
@@ -92,27 +96,27 @@ const App = () => {
         />
 
         {/* Authenticated routes */}
-        <Route path="/new-story" element={protectedRoute(<NewStory />)} />
+        <Route path="/new-story" element={ProtectedRoute(<NewStory />)} />
         <Route
           path="/me/notifications"
-          element={protectedRoute(<NotificationsPage />)}
+          element={ProtectedRoute(<NotificationsPage />)}
         />
         <Route
           path="/explore-topics"
-          element={protectedRoute(<ExploreTopicsPage />)}
+          element={ProtectedRoute(<ExploreTopicsPage />)}
         />
-        <Route path="/:username" element={protectedRoute(<ProfilePage />)} />
+        <Route path="/:username" element={ProtectedRoute(<ProfilePage />)} />
         <Route
           path="/:username/following"
-          element={protectedRoute(<ConnectionsPage />)}
+          element={ProtectedRoute(<ConnectionsPage />)}
         />
         <Route
           path="/:username/followers"
-          element={protectedRoute(<ConnectionsPage />)}
+          element={ProtectedRoute(<ConnectionsPage />)}
         />
         <Route
           path="/:username/:titleSlug"
-          element={protectedRoute(<BlogDetailsPage />)}
+          element={ProtectedRoute(<BlogDetailsPage />)}
         />
       </Routes>
 

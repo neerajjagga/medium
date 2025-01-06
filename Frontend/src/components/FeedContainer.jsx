@@ -3,6 +3,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { useFeedStore } from "../store/useFeedStore";
 import BlogCard from "./BlogCard";
+import {debounce} from "../lib/utils";
 
 const FeedContainer = () => {
   const [activeTopic, setActiveTopic] = useState("for you");
@@ -21,7 +22,7 @@ const FeedContainer = () => {
     isGettingFeeds,
     message,
     allBlogsFetched,
-    setIsAllBlogsFetched,
+    setAllBlogsFetched,
     blogs,
     setBlogs,
     getForYouFeeds,
@@ -30,6 +31,12 @@ const FeedContainer = () => {
 
   useEffect(() => {
     getForYouFeeds(page);
+    window.addEventListener("scroll", debounce(handlePageScroll, 75));
+    return () => {
+      window.removeEventListener("scroll", debounce(handlePageScroll, 75));
+      setBlogs([]);
+      setAllBlogsFetched(false);
+    }
   }, []);
 
   useEffect(() => {
@@ -100,9 +107,10 @@ const FeedContainer = () => {
   const handleClick = (topic) => {
     setLoading(false);
     setBlogs([]);
-    setIsAllBlogsFetched(false);
+    setAllBlogsFetched(false);
     setActiveTopic(topic);
     setPage(1);
+    window.scrollTo({ top: 0 });
 
     if (topic === "for you") {
       getForYouFeeds(1);
@@ -123,8 +131,6 @@ const FeedContainer = () => {
       }
     }
   };
-
-  window.addEventListener("scroll", handlePageScroll);
 
   return (
     <div className="flex flex-col">

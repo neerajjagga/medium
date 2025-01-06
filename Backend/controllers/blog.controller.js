@@ -439,10 +439,9 @@ const getUserBlogs = async (req, res) => {
       .lean();
 
     if (userBlogs.length === 0 && page == 1) {
-      console.log("Get!");
       return res.status(200).json({
         success: true,
-        message: `No blog is created!`,
+        message: `No blog is created yet!`,
         allBlogsFetched: false,
       });
     }

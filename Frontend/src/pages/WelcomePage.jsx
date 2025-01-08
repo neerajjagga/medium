@@ -7,7 +7,7 @@ const WelcomePage = () => {
   const [showAuthFrom, setShowAuthForm] = useState(false);
 
   const handleClick = () => {
-    setShowAuthForm(!showAuthFrom);
+    setShowAuthForm((prevValue) => !prevValue);
   }
 
   return (

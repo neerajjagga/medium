@@ -1,7 +1,7 @@
 import { create } from "zustand";
 import axiosInstance from "../lib/axios";
 import toast from "react-hot-toast";
-import {useAuthStore} from "./useAuthStore";
+import { useAuthStore } from "./useAuthStore";
 
 export const useProfileStore = create((set, get) => ({
   profileData: null,
@@ -17,6 +17,8 @@ export const useProfileStore = create((set, get) => ({
   isGettingUsers: false,
   isUsersFetched: false,
   allUsersFetched: false,
+
+  isUpdatingProfile: false,
 
   setProfileData: (data) => set({ profileData: data }),
   setIsProfileFetched: (value) => set({ isProfileFetched: value }),
@@ -34,7 +36,9 @@ export const useProfileStore = create((set, get) => ({
       const res = await axiosInstance.get(`/profile/${username}`);
       set({ profileData: res.data.user, isProfileFetched: true });
     } catch (error) {
-      toast.error(error.response.data.message);
+      if (error.response.status !== 403) {
+        toast.error(error.response.data.message);
+      }
     } finally {
       set({ isGettingProfile: false });
     }
@@ -118,6 +122,25 @@ export const useProfileStore = create((set, get) => ({
       if (page === 1) {
         set({ isGettingUsers: false });
       }
+    }
+  },
+
+  updateProfile: async (data) => {
+    set({ isUpdatingProfile: true });
+    try {
+      const res = await axiosInstance.patch("/profile/edit", data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      useAuthStore.getState().setAuthUser(res.data.user);
+      toast.success("Profile Updated Successfully!");
+      return res.data.user;
+    } catch (error) {
+      toast.error(error.response.data.message);
+      return false;
+    } finally {
+      set({ isUpdatingProfile: false });
     }
   },
 }));

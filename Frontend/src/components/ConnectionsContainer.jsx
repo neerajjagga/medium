@@ -115,7 +115,7 @@ const ConnectionsContainer = ({ connectionType, profileData }) => {
                       <img
                         src={user.profileImgUrl}
                         alt={user.name}
-                        className="size-[3rem] object-cover"
+                        className="size-[3rem] object-cover rounded-full"
                       />
                       <div className="flex flex-col gap-0.5">
                         <h4 className="text-[0.9rem] capitalize font-semibold tracking-tight">

@@ -81,10 +81,7 @@ const deleteImageOnCloudinary = async (secure_url) => {
         }
 
         const response = await cloudinary.uploader.destroy(publicId, { invalidate : true });
-        
-        if(response.result === 'not found') {
-            throw new Error("Image not found");
-        }
+    
 
         return response;
     } catch (error) {

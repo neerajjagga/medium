@@ -2,7 +2,7 @@ const { User } = require("../models/user.model");
 const { getPagination } = require("../utils/pagination.utility");
 const { validateProfileUpdateData } = require("../utils/userValidation");
 const fs = require("fs");
-const { uploadImageOnCloudinary } = require("../utils/cloudinary.utility");
+const { uploadImageOnCloudinary, deleteImageOnCloudinary } = require("../utils/cloudinary.utility");
 
 const getProfile = async (req, res) => {
   try {
@@ -44,7 +44,7 @@ const getProfile = async (req, res) => {
       .exec();
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(403).json({
         success: false,
         message: `User with username '${username}' not found.`,
       });
@@ -173,14 +173,7 @@ const updateProfile = async (req, res) => {
 
     const updateData = {};
     if (name) updateData.name = name;
-    if (username) {
-      // check the user is not updating the older username
-      if (loggedInUser.username === username) {
-        return res.status(400).json({
-          success: false,
-          message: "Username can't be same as the previous one",
-        });
-      }
+    if (username !== loggedInUser.username) {
       // check if the username is available or not
       const isUserWithUsername = await User.findOne({ username });
       if (isUserWithUsername) {
@@ -191,7 +184,7 @@ const updateProfile = async (req, res) => {
       }
       updateData.username = username;
     }
-    if (bio) updateData.bio = bio;
+    updateData.bio = bio;
 
     if (req.file) {
       try {
@@ -205,7 +198,7 @@ const updateProfile = async (req, res) => {
 
         updateData.profileImgUrl = response.secure_url;
       } catch (error) {
-        console.log("Error coming while uploading image");
+        console.log("Error coming while uploading image", error);
 
         if (req.file && req.file.path) {
           fs.unlinkSync(req.file.path);
@@ -225,6 +218,11 @@ const updateProfile = async (req, res) => {
       { new: true }
     ).select("-password");
 
+    // delete user old profile image if it exists
+    if(loggedInUser.profileImgUrl.includes('https://res.cloudinary.com') && req.file){
+      await deleteImageOnCloudinary(loggedInUser.profileImgUrl);
+    }
+
     return res.status(200).json({
       success: true,
       message: "Profile updated successfully",
@@ -241,8 +239,7 @@ const updateProfile = async (req, res) => {
 
     res.status(statusCode).json({
       success: false,
-      message: "An error occurred while updating the profile.",
-      error: error.message,
+      message: error.message,
     });
   }
 };

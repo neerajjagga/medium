@@ -26,7 +26,7 @@ const BlogCard = (props) => {
             <img
               src={creator.profileImgUrl}
               alt={creator.name}
-              className="size-5 object-cover rounded-md hover:shadow-sm"
+              className="size-5 object-cover rounded-full hover:shadow-sm"
             />
             <span className="text-[0.8rem] mb-[0.2rem] capitalize hover:underline">
               {creator.name}

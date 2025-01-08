@@ -3,14 +3,20 @@ import { Ellipsis } from "lucide-react";
 import { formatFollowers } from "../lib/utils";
 import { useProfileStore } from "../store/useProfileStore";
 import { useAuthStore } from "../store/useAuthStore";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-const ProfileSidebar = ({ profileData }) => {
+const ProfileSidebar = ({ profileData, setShowUpdateProfileModal }) => {
   const { followUser, unfollowUser } = useProfileStore();
 
   const { authUser } = useAuthStore();
-  const [isFollowing, setIsFollowing] = useState(profileData.followers.includes(authUser._id));
-  const [followersCount, setFollowersCount] = useState(profileData.followersCount);
+
+  const [isFollowing, setIsFollowing] = useState(
+    profileData.followers.includes(authUser._id)
+  );
+  
+  const [followersCount, setFollowersCount] = useState(
+    profileData.followersCount
+  );
 
   const handleClick = async () => {
     if (isFollowing) {
@@ -32,7 +38,7 @@ const ProfileSidebar = ({ profileData }) => {
               <img
                 src={profileData.profileImgUrl}
                 alt={profileData.name}
-                className="size-full object-cover"
+                className="rounded-full size-full object-cover"
               />
             </div>
             <div className="flex flex-col gap-2 custom-md:gap-1.5 custom-md:mt-0.5">
@@ -70,18 +76,21 @@ const ProfileSidebar = ({ profileData }) => {
       {profileData.username === authUser.username && (
         <div className="flex flex-col gap-4 items-start">
           <div className="flex flex-col gap-2.5">
-            <div className="size-[6rem] -ms-2 custom-md:size-[3.5rem] custom-md:ms-0">
+          <div className="size-[6rem] -ms-2 custom-md:size-[3.5rem] custom-md:ms-0">
               <img
                 src={profileData.profileImgUrl}
                 alt={profileData.name}
-                className="size-full object-cover"
+                className="rounded-full size-full object-cover"
               />
             </div>
             <h2 className="text-base font-bold text-neutral-700 tracking-tight break-words custom-md:text-2xl custom-md:font-medium">
               {profileData.name}
             </h2>
           </div>
-          <button className="text-green-600 text-[0.75rem] ms-0.5 cursor-pointer hover:text-black">
+          <button
+            className="text-green-600 text-[0.75rem] ms-0.5 cursor-pointer hover:text-black"
+            onClick={() => setShowUpdateProfileModal((prevValue) => !prevValue)}
+          >
             Edit profile
           </button>
         </div>
@@ -105,7 +114,7 @@ const ProfileSidebar = ({ profileData }) => {
                         className="flex items-center gap-2.5 hover:underline"
                       >
                         <img
-                          className="size-6 object-cover"
+                          className="size-6 object-cover rounded-full"
                           src={user.profileImgUrl}
                           alt={user.name}
                         />

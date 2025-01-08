@@ -43,7 +43,6 @@ const ProfileContainer = ({ profileData }) => {
     if (loading === true && !allBlogsFetched) {
       setPage((prevValue) => prevValue + 1);
     }
-    console.log("Loading: ", loading, "All Blogs Fetched: ", allBlogsFetched);
   }, [loading]);
 
   const handlePageScroll = (e) => {
@@ -116,9 +115,9 @@ const ProfileContainer = ({ profileData }) => {
           <h4 className="text-[0.85rem] text-neutral-600 tracking-tight font-medium">
             Member Since {formatMongoDate(profileData.createdAt)}
           </h4>
-          <p className="text-[0.8rem] text-neutral-600 custom-md:hidden">
-            {profileData.bio}
-          </p>
+          {profileData.bio && (
+            <p className="text-[0.8rem] text-neutral-600">{profileData.bio}</p>
+          )}
           <div className="flex gap-6">
             <Link
               to={`/${profileData.username}/followers`}

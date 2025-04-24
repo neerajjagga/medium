@@ -1,3 +1,6 @@
+import { clsx } from 'clsx';
+import { twMerge } from 'tailwind-merge';
+
 //function that converts a number of followers into a formatted string with k for thousands and M for millions
 export function formatFollowers(followers) {
   if (followers >= 1000000) {
@@ -49,4 +52,9 @@ export function debounce(func, delay) {
       func.apply(this, args);
     }, delay);
   };
+}
+
+
+export function cn(...inputs) {
+  return twMerge(clsx(inputs));
 }

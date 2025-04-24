@@ -103,6 +103,13 @@ userSchema.methods.getToken = async function () {
   return token;
 };
 
+userSchema.set("toJSON", {
+  versionKey: false,
+  transform: function(_, ret){
+    delete ret.password;
+  }
+})
+
 const User = new mongoose.model("User", userSchema);
 
 module.exports = {

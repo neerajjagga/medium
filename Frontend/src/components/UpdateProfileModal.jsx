@@ -50,9 +50,9 @@ const UpdateProfileModal = ({ handleClick }) => {
 
   const isDataChanged = () => {
     if (
-      authUser.name === formData.name &&
-      authUser.username === formData.username &&
-      authUser.bio === formData.bio &&
+      authUser.name === formData.name.trim() &&
+      authUser.username === formData.username.trim() &&
+      authUser.bio === formData.bio.trim() &&
       image === null
     ) {
       return false;
@@ -200,7 +200,7 @@ const UpdateProfileModal = ({ handleClick }) => {
                 required
               />
               <span className="text-sm self-end">
-                <span className="font-semibold">{formData.name.length}</span>/50
+                <span className="font-semibold">{formData.name.length}</span>/25
               </span>
             </div>
             <div className="flex flex-col gap-2">

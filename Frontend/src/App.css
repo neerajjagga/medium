@@ -1,19 +1,99 @@
 /* All Custom CSS Styles */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Source+Sans+3:ital,wght@0,200..900;1,200..900&display=swap');
 
-.search-input:focus + .search-icon{
+*{
+  font-family: "Roboto", serif;
+  box-sizing: border-box;
+}
+
+.search-input:focus+.search-icon {
   color: black;
+}
+
+.tiptap {
+  min-height: 60vh;
+}
+
+.ProseMirror h3 {
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: #2e2d2d;
+}
+
+.ProseMirror h4 {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #2e2d2d;
+}
+
+.ProseMirror p {
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: #2e2d2d;
+  letter-spacing: -0.025em;
+}
+
+.prose > *:not(:first-child) {
+  margin-top: 0.7rem;
+}
+
+.ProseMirror code {
+  background-color: #1e1e2f; 
+  color: #c9d1d9; 
+  padding: 0.7rem;
+  border-radius: 0.3rem; 
+  font-size: 1rem;
+}
+
+.ProseMirror pre {
+  background-color: #1e1e2f; 
+  color: #c9d1d9;
+  padding: 0.7rem; 
+  border-radius: 0.2rem;
+  overflow-x: auto; 
+}
+
+.ProseMirror pre code{
+  padding: 0;
+  border-radius: 0;
+}
+
+.ProseMirror a{
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.ProseMirror img{
+  width: 100%;
+}
+.ProseMirror img:hover{
+  outline: 3px solid #6dd66d;
+}
+
+.ProseMirror p.is-editor-empty:first-child::before,
+.ProseMirror h1.is-editor-empty:first-child::before,
+.ProseMirror h2.is-editor-empty:first-child::before {
+  color: #9ca3af;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+.ProseMirror:focus {
+  outline: none;
 }
 
 /* Responsive Styles */
 
-@media (max-width: 1279px){
-    .brand-image{
-        right: -8rem;
-    }
+@media (max-width: 1279px) {
+  .brand-image {
+    right: -8rem;
+  }
 }
 
-@media (max-width: 1023px){
-    .brand-image{
-        right: -16rem;
-    }
+@media (max-width: 1023px) {
+  .brand-image {
+    right: -16rem;
+  }
 }

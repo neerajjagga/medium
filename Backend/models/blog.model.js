@@ -24,6 +24,10 @@ const blogSchema = mongoose.Schema({
         maxLength : 5000,
         trim : true,
     },
+    contentJSON: {
+        type: Object,
+        required: true
+    },
     thumbnailUrl : {
         type : String,
         default: "/assets/media/thumbnail.png"

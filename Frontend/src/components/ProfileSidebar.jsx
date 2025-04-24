@@ -32,18 +32,18 @@ const ProfileSidebar = ({ profileData, setShowUpdateProfileModal }) => {
   return (
     <div className="flex flex-col gap-10">
       {profileData.username !== authUser.username && (
-        <div className="flex flex-col gap-2.5 items-start custom-md:flex-row custom-md: justify-between">
+        <div className="flex flex-col gap-2.5 items-start custom-md:flex-row custom-md: justify-between custom-sm:flex-col">
           <div className="flex flex-col gap-2.5 items-start custom-md:flex-row custom-md:gap-3.5">
             <div className="size-[6rem] -ms-2 custom-md:size-[3.5rem] custom-md:ms-0">
               <img
-                src={profileData.profileImgUrl}
+                src={profileData.profileImgUrl || "/assets/media/avatar.png"}
                 alt={profileData.name}
                 className="rounded-full size-full object-cover"
               />
             </div>
             <div className="flex flex-col gap-2 custom-md:gap-1.5 custom-md:mt-0.5">
               <div className="flex gap-2 items-end">
-                <h2 className="text-base font-bold text-neutral-700 tracking-tight break-words custom-md:text-2xl custom-md:font-medium">
+                <h2 className="line-clamp-1 text-base font-bold text-neutral-700 tracking-tight break-words custom-md:text-2xl custom-md:font-medium">
                   {profileData.name}
                 </h2>
                 <span
@@ -66,7 +66,7 @@ const ProfileSidebar = ({ profileData, setShowUpdateProfileModal }) => {
               isFollowing
                 ? "bg-white text-green-700 hover:bg-gray-200"
                 : "bg-green-700 text-white hover:bg-green-800"
-            }`}
+            } custom-sm:mt-0`}
             onClick={handleClick}
           >
             {isFollowing ? "Following" : "Follow"}

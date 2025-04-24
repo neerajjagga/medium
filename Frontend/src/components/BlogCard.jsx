@@ -1,7 +1,7 @@
 import { CircleMinus, Ellipsis } from "lucide-react";
 import React from "react";
 import { formatMongoDate } from "../lib/utils";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 
 const BlogCard = (props) => {
   const {
@@ -16,10 +16,14 @@ const BlogCard = (props) => {
   } = props.cardData;
 
   return (
-    <li className="grid grid-cols-3 pt-3 pb-6 border-solid border-gray-200 border-b-[1px]">
+    <li
+      className={`grid grid-cols-3 pt-3 pb-6 border-solid border-gray-200 border-b-[1px] ${
+        !thumbnailUrl ? "gap-4" : ""
+      }`}
+    >
       {creator && (
-        <div className="mb-1.5">
-          <Link 
+        <div className="mb-1.5 col-span-full">
+          <Link
             to={`/${creator.username}`}
             className="flex items-center gap-1.5 "
           >
@@ -36,21 +40,27 @@ const BlogCard = (props) => {
       )}
       <Link
         to={`/${creator ? creator.username : props.username}/${titleSlug}`}
-        className="col-span-3 grid grid-cols-3 sm:grid-cols-12 justify-between gap-8"
+        className={`col-span-3 grid ${
+          thumbnailUrl ? "grid-cols-3 sm:grid-cols-12" : ""
+        } justify-between gap-8`}
       >
         <div className="col-span-2 sm:col-span-8 flex flex-col gap-2 justify-center">
-          <h2 className="text-lg sm:text-xl md:text-2xl tracking-tighter leading-6 font-bold capitalize text-neutral-800">
+          <h2 className="line-clamp-2 text-lg sm:text-xl md:text-2xl tracking-tighter leading-6 font-bold capitalize text-neutral-800">
             {title}
           </h2>
-          <h3 className="text-[0.75rem] text-stone-500 leading-[1.25rem] sm:text-[0.85rem] md:text-[0.9rem]">{subtitle.slice(0, 100)}...</h3>
+          <h3 className="line-clamp-2 text-[0.75rem] text-stone-500 leading-[1.25rem] sm:text-[0.85rem] md:text-[0.9rem]">
+            {subtitle}
+          </h3>
         </div>
-        <div className="col-span-1 sm:col-span-4">
-          <img
-            src={thumbnailUrl}
-            alt={title}
-            className="object-cover rounded-sm"
-          />
-        </div>
+        {thumbnailUrl && (
+          <div className="col-span-1 sm:col-span-4">
+            <img
+              src={thumbnailUrl}
+              alt={title}
+              className="object-cover rounded-sm"
+            />
+          </div>
+        )}
       </Link>
       <div className="col-span-3 flex justify-between items-center mt-2 gap-2 md:col-span-2 sm:col-span-3">
         <div className="flex gap-4 items-center">
@@ -71,7 +81,7 @@ const BlogCard = (props) => {
               {formatMongoDate(publishAt)}
             </span>
           </div>
-          <div className="flex gap-1 items-center">
+          <div className="flex gap-1 items-center custom-sm:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"
@@ -87,7 +97,7 @@ const BlogCard = (props) => {
             </svg>
             <span className="text-[0.75rem] text-stone-500">{clapCount}</span>
           </div>
-          <div className="flex gap-0.5 items-center">
+          <div className="flex gap-0.5 items-center custom-sm:hidden">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="16"

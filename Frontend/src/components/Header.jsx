@@ -48,7 +48,7 @@ const Header = (props) => {
         className={`w-full ${container} ${marginX} flex justify-between items-center ${paddingX} ${paddingY}`}
       >
         <div className="flex gap-4 items-center">
-          <div className="text-3xl capitalize">
+          <div className="text-3xl capitalize text-black">
             <Link to="/">Medium</Link>
           </div>
           {authUser && <SearchBar />}
@@ -113,7 +113,7 @@ const Header = (props) => {
           )}
           {!authUser && (
             <li>
-              <button onClick={handleClick}>Sign in</button>
+              <button className="text-neutral-700 hover:text-black" onClick={handleClick}>Sign in</button>
             </li>
           )}
           {!authUser && (

@@ -153,11 +153,6 @@ const FeedContainer = () => {
           onScroll={handleScroll}
           ref={ulRef}
         >
-          <li className="pt-[0.55rem]">
-            <button className="rounded-full hover:bg-[#f5f5f5]">
-              <Plus className="size-5" absoluteStrokeWidth={true} size={40} />
-            </button>
-          </li>
           {authUser.interestedTopics
             .concat(["for you", "following"])
             .map((topic, index) => {

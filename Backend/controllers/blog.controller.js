@@ -17,7 +17,7 @@ const { getPagination } = require("../utils/pagination.utility");
 const createBlog = async (req, res) => {
   try {
     validateCreateBlogData(req);
-    const { title, content, visibility, tags } = req.body;
+    let { title, subTitle, content, visibility, tags } = req.body;
 
     const creatorId = req.user?._id;
 
@@ -40,13 +40,15 @@ const createBlog = async (req, res) => {
       slugify(tag, { lower: true, strict: true })
     );
 
-    // generate subtitle from content
-    let subtitle = null;
-    if (content.length < 150) {
-      subtitle = content; // If content is less than 150 characters, use it as it is
-    } else {
-      subtitle = content.slice(0, 150).trim().concat("...");
+    // if subTitle is not given, generate subtitle from content
+    if(!subTitle){
+      if (content.length < 150) {
+        subTitle = content; // If content is less than 150 characters, use it as it is
+      } else {
+        subTitle = content.slice(0, 150).trim().concat("...");
+      }
     }
+
 
     let secure_url = "/assets/media/thumbnail.png";
 
@@ -103,6 +105,7 @@ const createBlog = async (req, res) => {
     res.status(201).json({
       success: true,
       message: "Blog created successfully",
+      blog,
     });
   } catch (error) {
     console.log("Error coming while creating blog" + error);

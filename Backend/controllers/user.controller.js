@@ -54,7 +54,7 @@ const signupUser = async (req, res) => {
     return res.status(201).json({
       success: true,
       message: "User created successfully",
-      user: { ...user._doc, password: undefined, emailId: undefined },
+      user: { ...user._doc, emailId: undefined, password: undefined },
     });
   } catch (error) {
     console.log(error);

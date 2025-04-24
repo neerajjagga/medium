@@ -5,6 +5,7 @@ export default {
     extend: {
       screens: {
         'custom-md': { 'max': '903px' }, // Custom breakpoint for max-width 903px
+        'custom-sm': { 'max': '403px' }, // Custom breakpoint for max-width 403px
       },
       colors: {
         primary: "#F7F4ED",
@@ -14,5 +15,5 @@ export default {
       }
     },
   },
-  plugins: [require('daisyui')],
+  plugins: [],
 };

@@ -104,7 +104,7 @@ const SignUpForm = () => {
       <div className="relative">
         <input
           type="text"
-          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900"
+          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 bg-white"
           placeholder="Name"
           value={formData.name}
           onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -116,7 +116,7 @@ const SignUpForm = () => {
       <div className="relative">
         <input
           type="text"
-          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900"
+          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 bg-white"
           placeholder="Username"
           value={formData.username}
           onChange={(e) =>
@@ -131,7 +131,7 @@ const SignUpForm = () => {
       <div className="relative">
         <input
           type="email"
-          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900"
+          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-3 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 bg-white"
           placeholder="Email"
           value={formData.emailId}
           onChange={(e) =>
@@ -146,7 +146,7 @@ const SignUpForm = () => {
       <div className="relative">
         <input
           type={showPassword ? "text" : "password"}
-          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-9 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900"
+          className="w-full border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-9 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 bg-white"
           placeholder="Password"
           value={formData.password}
           onChange={(e) =>
@@ -167,7 +167,7 @@ const SignUpForm = () => {
       <div className="relative col-span-full">
         <span className="text-sm">{formData.bio.length}/200</span>
         <textarea
-          className="w-full mt-1 border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-2.5 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 resize-none"
+          className="w-full mt-1 border-[1px] border-neutral-600 border-solid rounded-md ps-9 pe-2.5 py-1.5 outline-none focus:outline-2 focus:outline-double focus:outline-neutral-600 tracking-wide text-neutral-900 resize-none bg-white"
           rows="4"
           placeholder="Bio"
           maxLength="200"

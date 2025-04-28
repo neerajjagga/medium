@@ -45,10 +45,10 @@ const signupUser = async (req, res) => {
     const token = await user.getToken();
 
     res.cookie("token", token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
     return res.status(201).json({
@@ -96,10 +96,10 @@ const userLogin = async (req, res) => {
     // Generate JWT token
     const token = await user.getToken();
     res.cookie("token", token, {
-      maxAge: 7 * 24 * 60 * 60 * 1000, // Expires in 7 days
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
     return res.status(200).json({
@@ -129,8 +129,8 @@ const userLogout = async (req, res) => {
 
     res.clearCookie("token", {
       httpOnly: true,
-      sameSite: "strict",
-      secure: process.env.NODE_ENV !== "development",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
+      secure: process.env.NODE_ENV === "production",
     });
 
     return res.status(200).json({

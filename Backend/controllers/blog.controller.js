@@ -24,7 +24,7 @@ const createBlog = async (req, res) => {
     // generate reading time
     // if avg reading speed is 255 words per min then
     const averageWordsPerMinute = 255;
-    const wordCount = content.split(" ").length;
+    const wordCount = content.split(" ")?.length;
     const estimatedReadTime = Math.ceil(wordCount / averageWordsPerMinute);
 
     //generate slug for the title
@@ -36,13 +36,13 @@ const createBlog = async (req, res) => {
     const finalSlug = `${titleSlug}-${uniqueId}`;
 
     // generate slugs for tags
-    const slugifyTags = tags.split(',').map((tag) =>
-      slugify(tag, { lower: true, strict: true })
+    const slugifyTags = (tags || "").replace(/#/g, "").split(',').map((tag) =>
+      slugify(tag.trim(), { lower: true, strict: true })
     );
 
     // if subTitle is not given, generate subtitle from content
-    if(!subTitle){
-      if (content.length < 150) {
+    if (!subTitle) {
+      if (content?.length < 150) {
         subTitle = content; // If content is less than 150 characters, use it as it is
       } else {
         subTitle = content.slice(0, 150).trim().concat("...");
@@ -61,16 +61,9 @@ const createBlog = async (req, res) => {
           FOLDER_NAME
         );
 
-        // delete the file from local directory
-        fs.unlinkSync(req.file.path);
-
         secure_url = response.secure_url;
       } catch (error) {
         console.log("Error coming while uploading image");
-
-        if (req.file && req.file.path) {
-          fs.unlinkSync(req.file.path);
-        }
 
         return res.status(500).json({
           success: false,

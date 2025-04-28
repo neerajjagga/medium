@@ -4,19 +4,7 @@ const {createBlog, clapBlog, addComment, editComment, deleteComment, deleteBlog,
 const multer = require('multer');
 const blogRouter = express.Router();
 
-const storage = multer.diskStorage({
-    destination : function(req, file, cb) {
-        cb(null, './uploads/thumbnail-images');
-    },
-    filename : function(req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
-    }
-})
-
-const upload = multer({ storage });
-
-
-blogRouter.post('/createblog', userAuth, upload.single('thumbnailImage'), createBlog);
+blogRouter.post('/createblog', userAuth, createBlog);
 blogRouter.delete('/deleteblog/:blogId', userAuth, deleteBlog);
 blogRouter.get('/:username/:titleSlug', userAuth, viewBlog);
 blogRouter.post('/clap/:blogId', userAuth, clapBlog);

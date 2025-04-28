@@ -1,9 +1,6 @@
 const validateCreateBlogData = (req) => {
   const { title, subTitle, content, visibility, tags } = req.body;
 
-  if (!title || !content || !tags) {
-    throw { status: 400, message: "Title, content, or tags cannot be empty" };
-  }
   if (title.length < 10 || title.length > 50) {
     throw {
       status: 400,

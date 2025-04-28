@@ -11,76 +11,95 @@ const {
   uploadImageOnCloudinary,
   deleteImageOnCloudinary,
 } = require("../utils/cloudinary.utility");
-const fs = require("fs");
 const { getPagination } = require("../utils/pagination.utility");
 
 const createBlog = async (req, res) => {
   try {
     validateCreateBlogData(req);
-    let { title, subTitle, content, htmlContent, jsonContent, visibility, tags } = req.body;
-    console.log(JSON.parse(jsonContent));
+
+    const {
+      title,
+      subTitle,
+      content,
+      htmlContent,
+      jsonContent,
+      visibility,
+      tags,
+    } = req.body;
+
+    if (!title || !content || !htmlContent || !jsonContent) {
+      return res.status(400).json({
+        success: false,
+        message: "Missing required fields: title, content, htmlContent, jsonContent",
+      });
+    }
+
+    let parsedJsonContent;
+    try {
+      parsedJsonContent = JSON.parse(jsonContent);
+    } catch (err) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid JSON content",
+        error: err.message,
+      });
+    }
+
     const creatorId = req.user?._id;
 
-    // generate reading time
-    // if avg reading speed is 255 words per min then
+    // Generate reading time
     const averageWordsPerMinute = 255;
-    const wordCount = content.split(" ")?.length;
+    const wordCount = content.trim().split(/\s+/).length; // handles multiple spaces
     const estimatedReadTime = Math.ceil(wordCount / averageWordsPerMinute);
 
-    //generate slug for the title
+    // Generate slug for the title
     const titleSlug = slugify(title, { lower: true, strict: true });
-
-    // add uniqueId to titleSlug to differentiate between same titleSlugs
     const nanoid = customAlphabet("1234567890abcdef", 10);
     const uniqueId = nanoid();
     const finalSlug = `${titleSlug}-${uniqueId}`;
 
-    // generate slugs for tags
-    const slugifyTags = (tags || "").replace(/#/g, "").split(',').map((tag) =>
-      slugify(tag.trim(), { lower: true, strict: true })
-    );
+    // Generate slugs for tags
+    const slugifyTags = (tags || "")
+      .replace(/#/g, "")
+      .split(",")
+      .map((tag) => slugify(tag.trim(), { lower: true, strict: true }));
 
-    // if subTitle is not given, generate subtitle from content
-    if (!subTitle) {
-      if (content?.length < 150) {
-        subTitle = content; // If content is less than 150 characters, use it as it is
-      } else {
-        subTitle = content.slice(0, 150).trim().concat("...");
-      }
+    // If subTitle is not given, generate from content
+    let finalSubTitle = subTitle;
+    if (!finalSubTitle) {
+      finalSubTitle = content.length <= 150
+        ? content
+        : content.slice(0, 150).trim() + "...";
     }
 
-
+    // Default thumbnail
     let secure_url = "/assets/media/thumbnail.png";
 
-    // if req.file
+    // Handle file upload if exists
     if (req.file) {
+      const FOLDER_NAME = "thumbnail-images";
       try {
-        const FOLDER_NAME = "thumbnail-images";
-        const response = await uploadImageOnCloudinary(
-          req.file.path,
-          FOLDER_NAME
-        );
-
+        const response = await uploadImageOnCloudinary(req.file.path, FOLDER_NAME);
         secure_url = response.secure_url;
-      } catch (error) {
-        console.log("Error coming while uploading image");
+      } catch (uploadError) {
+        console.error("Error uploading image:", uploadError);
 
         return res.status(500).json({
           success: false,
           message: "Failed to upload image, try again later",
-          error: error.message,
+          error: uploadError.message,
         });
       }
     }
 
-    // save the data
+    // Create a new Blog instance
     const blog = new Blog({
       title,
       titleSlug: finalSlug,
-      subtitle: subTitle,
+      subtitle: finalSubTitle,
       content,
       htmlContent,
-      jsonContent: JSON.parse(jsonContent),
+      jsonContent: parsedJsonContent,
       thumbnailUrl: secure_url,
       visibility,
       tags: slugifyTags,
@@ -88,13 +107,13 @@ const createBlog = async (req, res) => {
       creator: creatorId,
     });
 
-    //save the blog
     await blog.save();
 
-    // push blog id into the user blogs array
+    // Push blog ID to user's blogs array
     await User.findByIdAndUpdate(
-      { _id: creatorId },
-      { $push: { blogs: blog._id } }
+      creatorId,
+      { $push: { blogs: blog._id } },
+      { new: true }
     );
 
     res.status(201).json({
@@ -102,8 +121,10 @@ const createBlog = async (req, res) => {
       message: "Blog created successfully",
       blog,
     });
+
   } catch (error) {
-    console.log("Error coming while creating blog" + error);
+    console.error("Error while creating blog:", error);
+
     const statusCode = error.status || 500;
 
     res.status(statusCode).json({
@@ -341,7 +362,7 @@ const viewBlog = async (req, res) => {
     const titleSlug = req.params.titleSlug;
 
     const BLOG_SAFE_DATA =
-      "title titleSlug thumbnail content clapCount postResponseCount postResponses readingTime creator publishAt visibility -_id";
+      "title titleSlug thumbnailUrl content clapCount postResponseCount postResponses readingTime creator publishAt visibility -_id";
     const CREATOR_SAFE_DATA =
       "name username profileImgUrl bio followersCount followingCount -_id";
     const POST_RESPONSES_SAFE_DATA = "fromUserId message createdAt -_id";

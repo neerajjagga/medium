@@ -13,10 +13,6 @@ const getForYouFeed = async (req, res) => {
 
     //customized feed
     const userCustomizedBlogs = await Blog.find({
-      $and: [
-        { creator: { $ne: loggedInUser._id } },
-        { tags: { $in: loggedInUser.interestedTopics } },
-      ],
     })
       .sort({ publishAt: -1 })
       .select(BLOG_SAFE_DATA)

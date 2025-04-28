@@ -18,7 +18,7 @@ const upload = multer({ storage });
 
 blogRouter.post('/createblog', userAuth, upload.single('thumbnailImage'), createBlog);
 blogRouter.delete('/deleteblog/:blogId', userAuth, deleteBlog);
-blogRouter.get('/@:username/:titleSlug', userAuth, viewBlog);
+blogRouter.get('/:username/:titleSlug', userAuth, viewBlog);
 blogRouter.post('/clap/:blogId', userAuth, clapBlog);
 blogRouter.post('/addcomment/:blogId', userAuth, addComment); 
 blogRouter.patch('/editcomment/:commentId', userAuth, editComment); 

@@ -29,10 +29,10 @@ const validateCreateBlogData = (req) => {
         'Visibility is invalid. It must be either "locked" or "unlocked".',
     };
   }
-  if (!Array.isArray(JSON.parse(tags))) {
+  if (!Array.isArray(tags.split(','))) {
     throw { status: 400, message: "Tags should be an array" };
   }
-  if (JSON.parse(tags).length > 5) {
+  if (tags.split(',').length > 5) {
     throw { status: 400, message: "Maximum tags allowed: 5" };
   }
   if (req.file) {

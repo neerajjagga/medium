@@ -51,7 +51,7 @@ const Header = (props) => {
           <div className="text-3xl capitalize text-black">
             <Link to="/">Medium</Link>
           </div>
-          {authUser && <SearchBar />}
+          {/* {authUser && <SearchBar />} */}
         </div>
 
         <ul className={`flex items-center gap-7 capitalize ${linksFontSize}`}>
@@ -81,7 +81,7 @@ const Header = (props) => {
               />
             </Link>
           </li>
-          {authUser && (
+          {/* {authUser && (
             <li>
               <Link
                 to="/me/notifications"
@@ -95,7 +95,7 @@ const Header = (props) => {
                 />
               </Link>
             </li>
-          )}
+          )} */}
           {authUser && (
             <li
               className="cursor-pointer hover:shadow-sm"

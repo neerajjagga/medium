@@ -13,7 +13,7 @@ import VideoEmbed from "../../lib/customNode";
 
 const lowlight = createLowlight(common);
 
-const Tiptap = () => {
+const Tiptap = ({ setFormData }) => {
   const editor = useEditor({
     extensions: [
       StarterKit.configure({
@@ -46,7 +46,16 @@ const Tiptap = () => {
         class: "prose prose-lg max-w-none outline-none",
       },
     },
-    onUpdate: ({ editor }) => {},
+    onUpdate: ({ editor }) => {
+      setFormData((prev) => {
+        return {
+          ...prev,
+          content: editor.getText(),
+          htmlContent: editor.getHTML(),
+          jsonContent: editor.getJSON(),
+        };
+      });
+    },
   });
 
   if (!editor) return null;

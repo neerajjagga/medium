@@ -17,8 +17,8 @@ const { getPagination } = require("../utils/pagination.utility");
 const createBlog = async (req, res) => {
   try {
     validateCreateBlogData(req);
-    let { title, subTitle, content, visibility, tags } = req.body;
-
+    let { title, subTitle, content, htmlContent, jsonContent, visibility, tags } = req.body;
+    console.log(JSON.parse(jsonContent));
     const creatorId = req.user?._id;
 
     // generate reading time
@@ -36,7 +36,7 @@ const createBlog = async (req, res) => {
     const finalSlug = `${titleSlug}-${uniqueId}`;
 
     // generate slugs for tags
-    const slugifyTags = JSON.parse(tags).map((tag) =>
+    const slugifyTags = tags.split(',').map((tag) =>
       slugify(tag, { lower: true, strict: true })
     );
 
@@ -84,8 +84,10 @@ const createBlog = async (req, res) => {
     const blog = new Blog({
       title,
       titleSlug: finalSlug,
-      subtitle,
+      subtitle: subTitle,
       content,
+      htmlContent,
+      jsonContent: JSON.parse(jsonContent),
       thumbnailUrl: secure_url,
       visibility,
       tags: slugifyTags,
@@ -110,10 +112,6 @@ const createBlog = async (req, res) => {
   } catch (error) {
     console.log("Error coming while creating blog" + error);
     const statusCode = error.status || 500;
-
-    if (req.file && req.file.path) {
-      fs.unlinkSync(req.file.path);
-    }
 
     res.status(statusCode).json({
       success: false,
@@ -346,7 +344,6 @@ const deleteBlog = async (req, res) => {
 
 const viewBlog = async (req, res) => {
   try {
-    const loggedInUser = req.user;
     const username = req.params.username;
     const titleSlug = req.params.titleSlug;
 
@@ -378,7 +375,7 @@ const viewBlog = async (req, res) => {
     }
 
     // if user present, check the blog is valid or not
-    const blog = await Blog.find({
+    const blog = await Blog.findOne({
       $and: [{ creator: { $eq: user._id } }, { titleSlug }],
     })
       .select(BLOG_SAFE_DATA)

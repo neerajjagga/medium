@@ -28,7 +28,7 @@ app.use(cookieParser());
 // app.use(limiter);
 app.use(
   cors({
-    origin: ["http://localhost:5173", "https://medium-git-main-neerajjaggas-projects.vercel.app"],
+    origin: ["http://localhost:5173", "https://medium-git-main-neerajjaggas-projects.vercel.app", "https://medium-manan.vercel.app"],
     credentials: true,
   })
 );

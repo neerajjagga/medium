@@ -49,7 +49,7 @@ const Header = (props) => {
       >
         <div className="flex gap-4 items-center">
           <div className="text-3xl capitalize text-black">
-            <Link to="/">Medium</Link>
+            <Link to="/"></Link>
           </div>
           {/* {authUser && <SearchBar />} */}
         </div>

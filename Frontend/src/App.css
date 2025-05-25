@@ -6,6 +6,31 @@
   box-sizing: border-box;
 }
 
+/* Optional: Restore list styles */
+.default-browser-styles ul,
+.default-browser-styles ol {
+  list-style: revert;
+  margin: revert;
+  padding: revert;
+}
+
+/* Optional: Restore link styles */
+.default-browser-styles a {
+  text-decoration: revert;
+}
+
+/* Optional: Restore heading styles */
+.default-browser-styles h1,
+.default-browser-styles h2,
+.default-browser-styles h3,
+.default-browser-styles h4,
+.default-browser-styles h5,
+.default-browser-styles h6 {
+  font-size: revert;
+  font-weight: revert;
+  margin: revert;
+}
+
 .search-input:focus+.search-icon {
   color: black;
 }
@@ -82,6 +107,14 @@
 
 .ProseMirror:focus {
   outline: none;
+}
+
+.default-text {
+  all:revert;
+  font-family: initial;
+  margin: revert;
+  padding: revert;
+  line-height: revert;
 }
 
 /* Responsive Styles */

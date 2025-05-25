@@ -362,9 +362,9 @@ const viewBlog = async (req, res) => {
     const titleSlug = req.params.titleSlug;
 
     const BLOG_SAFE_DATA =
-      "title titleSlug thumbnailUrl content clapCount postResponseCount postResponses readingTime creator publishAt visibility -_id";
+      "title subtitle titleSlug thumbnailUrl content clapCount postResponseCount postResponses readingTime tags htmlContent creator publishAt visibility -_id";
     const CREATOR_SAFE_DATA =
-      "name username profileImgUrl bio followersCount followingCount -_id";
+      "name username profileImgUrl bio followers followersCount followingCount _id";
     const POST_RESPONSES_SAFE_DATA = "fromUserId message createdAt -_id";
     const FROM_USER_ID_SAFE_DATA = "name profileImgUrl -_id";
 

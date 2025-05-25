@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import Header from "../components/Header";
 import ProfileSidebar from "../components/ProfileSidebar";
 import ProfileContainer from "../components/ProfileContainer";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { useProfileStore } from "../store/useProfileStore";
 import ProfileSidebarSkeleton from "../components/Skeleton/ProfileSidebarSkeleton";
 import UpdateProfileModal from "../components/UpdateProfileModal";
@@ -10,8 +10,9 @@ import { useAuthStore } from "../store/useAuthStore";
 
 const ProfilePage = () => {
   const { username } = useParams();
+  const location = useLocation();
 
-  const [showUpdateProfileModal, setShowUpdateProfileModal] = useState(false);
+  const [showUpdateProfileModal, setShowUpdateProfileModal] = useState(location.state?.showUpdateProfileModal);
 
   const { authUser } = useAuthStore();
 

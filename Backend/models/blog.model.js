@@ -29,7 +29,7 @@ const blogSchema = mongoose.Schema(
     },
     thumbnailUrl: {
       type: String,
-      default: "/assets/media/thumbnail.png",
+      default: null,
     },
     claps: [
       {

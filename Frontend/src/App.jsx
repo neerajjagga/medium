@@ -73,7 +73,7 @@ const App = () => {
           element={
             !authUser ? (
               <WelcomePage />
-            ) : location.state ? (
+            ) : location.state?.from ? (
               <Navigate to={location.state.from.pathname} />
             ) : (
               <Navigate to="/" />
